@@ -1,0 +1,15 @@
+{
+  "name": "SemVerBuildSystem",
+  "version": "1.0.0",
+  "authors": [
+    "Pelle Bjerkestrand <pelle@pellebjerkestrand.net>"
+  ],
+  "description": "A Gulp based build system using Atomic Design and SemVer",
+  "license": "WTFPL",
+  "private": true,
+  "devDependencies": {
+    "knockout": "3.2.0",
+    "requirejs": "2.1.16",
+    "requirejs-text": "2.0.13"
+  }
+}
