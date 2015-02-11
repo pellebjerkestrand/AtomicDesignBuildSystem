@@ -1,4 +1,4 @@
-var project = 'SemVerBuildSystem';
+var project = 'AtomicDesignBuildSystem';
 
 var meta = require('./package.json');
 

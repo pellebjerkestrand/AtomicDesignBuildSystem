@@ -1,5 +1,5 @@
 {
-  "name": "SemVerBuildSystem",
+  "name": "AtomicDesignBuildSystem",
   "version": "1.0.0",
   "description": "A Gulp based build system using Atomic Design and SemVer",
   "author": "Pelle Bjerkestrand <pelle@pellebjerkestrand.net>",
