@@ -10,12 +10,14 @@ var amd = require('amd-optimize'),
     concat = require('gulp-concat'),
     glob = require('gulp-css-globbing'),
     data = require('gulp-data'),
+    jshint = require('gulp-jshint'),
     minify = require('gulp-minify-css'),
     rename = require('gulp-rename'),
     sass = require('gulp-sass'),
     swig = require('gulp-swig'),
     uglify = require('gulp-uglify'),
     path = require('path'),
+    stylish = require('jshint-stylish'),
     atom = require('./source/_tags/atom.js'),
     molecule = require('./source/_tags/molecule.js'),
     organism = require('./source/_tags/organism.js'),
@@ -106,6 +108,9 @@ gulp.task('clean:js', function(){
 
 gulp.task('build:js', ['clean:js'], function(){
     gulp.src(paths.source.scripts)
+        .pipe(jshint())
+        .pipe(jshint.reporter(stylish))
+        .pipe(jshint.reporter('fail'))
         .pipe(amd('app', options.amd))
         .pipe(concat(project.toLowerCase() + '.js'))
         .pipe(gulp.dest(paths.dist.js))

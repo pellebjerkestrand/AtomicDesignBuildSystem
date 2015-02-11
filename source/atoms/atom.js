@@ -8,5 +8,5 @@ define(['ko', 'text!./atom.tmpl.html'], function(ko, tmpl){
     return {
         viewModel: Atom,
         template: tmpl
-    }
+    };
 });
