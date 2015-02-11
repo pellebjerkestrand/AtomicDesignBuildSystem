@@ -14,6 +14,7 @@ var amd = require('amd-optimize'),
     minify = require('gulp-minify-css'),
     rename = require('gulp-rename'),
     sass = require('gulp-sass'),
+    sourcemaps = require('gulp-sourcemaps'),
     swig = require('gulp-swig'),
     uglify = require('gulp-uglify'),
     path = require('path'),
@@ -28,8 +29,8 @@ var dist = './dist/' + meta.version + '/',
 
 var paths = {
     dist: {
-        css: dist + 'css/',
-        js: dist + 'js/',
+        css: dist,
+        js: dist,
         pages: dist + 'pages/'
     },
     source: {
@@ -73,6 +74,10 @@ var options = {
     },
     minify: {
         keepSpecialComments: 0
+    },
+    sourcemaps: {
+        includeContent: false,
+        sourceRoot: './'
     }
 };
 
@@ -87,7 +92,7 @@ var getJson = function(file){
 };
 
 gulp.task('clean:css', function(){
-    del.sync(paths.dist.css);
+    del.sync(paths.dist.css + '*.css');
 });
 
 gulp.task('build:css', ['clean:css'], function(){
@@ -103,7 +108,10 @@ gulp.task('build:css', ['clean:css'], function(){
 });
 
 gulp.task('clean:js', function(){
-    del.sync(paths.dist.js);
+    del.sync([
+        paths.dist.js + '*.js',
+        paths.dist.js + '*.map'
+    ]);
 });
 
 gulp.task('build:js', ['clean:js'], function(){
@@ -113,9 +121,11 @@ gulp.task('build:js', ['clean:js'], function(){
         .pipe(jshint.reporter('fail'))
         .pipe(amd('app', options.amd))
         .pipe(concat(project.toLowerCase() + '.js'))
+        .pipe(sourcemaps.init())
         .pipe(gulp.dest(paths.dist.js))
         .pipe(rename(project.toLowerCase() + '.min.js'))
         .pipe(uglify())
+        .pipe(sourcemaps.write('./', options.sourcemaps))
         .pipe(gulp.dest(paths.dist.js));
 });
 
