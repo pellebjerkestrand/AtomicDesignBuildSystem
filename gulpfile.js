@@ -1,6 +1,6 @@
-var project = 'AtomicDesignBuildSystem';
-
 var meta = require('./package.json');
+
+var project = meta.name.toLowerCase();
 
 var amd = require('amd-optimize'),
     del = require('del'),
@@ -100,9 +100,9 @@ gulp.task('build:css', ['clean:css'], function(){
         .pipe(glob(options.glob))
         .pipe(sass())
         .pipe(prefix(options.prefix))
-        .pipe(rename(project.toLowerCase() + '.css'))
+        .pipe(rename(project + '.css'))
         .pipe(gulp.dest(paths.dist.css))
-        .pipe(rename(project.toLowerCase() + '.min.css'))
+        .pipe(rename(project + '.min.css'))
         .pipe(minify(options.minify))
         .pipe(gulp.dest(paths.dist.css));
 });
@@ -120,10 +120,10 @@ gulp.task('build:js', ['clean:js'], function(){
         .pipe(jshint.reporter(stylish))
         .pipe(jshint.reporter('fail'))
         .pipe(amd('app', options.amd))
-        .pipe(concat(project.toLowerCase() + '.js'))
+        .pipe(concat(project + '.js'))
         .pipe(sourcemaps.init())
         .pipe(gulp.dest(paths.dist.js))
-        .pipe(rename(project.toLowerCase() + '.min.js'))
+        .pipe(rename(project + '.min.js'))
         .pipe(uglify())
         .pipe(sourcemaps.write('./', options.sourcemaps))
         .pipe(gulp.dest(paths.dist.js));
