@@ -1,0 +1,1 @@
+Swig custom tags http://paularmstrong.github.io/swig/docs/extending/#tags
