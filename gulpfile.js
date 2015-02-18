@@ -121,10 +121,10 @@ gulp.task('build:js', ['clean:js'], function(){
         .pipe(jshint.reporter('fail'))
         .pipe(amd('app', options.amd))
         .pipe(concat(project + '.js'))
-        .pipe(sourcemaps.init())
         .pipe(gulp.dest(paths.dist.js))
-        .pipe(rename(project + '.min.js'))
+        .pipe(sourcemaps.init())
         .pipe(uglify())
+        .pipe(rename({suffix:'.min'}))
         .pipe(sourcemaps.write('./', options.sourcemaps))
         .pipe(gulp.dest(paths.dist.js));
 });
