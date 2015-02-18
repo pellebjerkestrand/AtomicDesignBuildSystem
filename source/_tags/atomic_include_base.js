@@ -1,4 +1,4 @@
-var base = require('./include.js');
+var base = require('../../node_modules/gulp-swig/node_modules/swig/lib/tags/include.js');
 
 var ignore = 'ignore',
     missing = 'missing',
