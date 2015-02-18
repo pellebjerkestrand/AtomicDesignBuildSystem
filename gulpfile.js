@@ -52,9 +52,9 @@ var options = {
             atoms: 'atoms',
             molecules: 'molecules',
             organisms: 'organisms',
-            require: '../bower_components/requirejs/require',
-            text: '../bower_components/requirejs-text/text',
-            ko: '../bower_components/knockout/dist/knockout'
+            require: '../node_modules/requirejs/require',
+            text: '../node_modules/requirejs-text/text',
+            ko: '../node_modules/knockout/build/output/knockout-latest'
         }
     },
     prefix: {
