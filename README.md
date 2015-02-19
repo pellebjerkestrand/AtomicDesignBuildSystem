@@ -85,3 +85,4 @@ Run `gulp` to build.
 - Support for testing
 - Watching files to trigger build
 - Built in web server
+- Style guide site generation
