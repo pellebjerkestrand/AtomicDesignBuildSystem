@@ -41,6 +41,18 @@ var paths = {
             '!' + source + '_tags/*.js'
         ],
         styles: source + 'global/app.scss'
+    },
+    watch: {
+        pages: [
+            source + '**/*.html',
+            '!' + source + '**/*.tmpl.html',
+            source + 'data/**/*.json'
+        ],
+        scripts: [
+            source + '**/*.js',
+            source + '**/*.tmpl.html'
+        ],
+        styles: source + '**/*.scss'
     }
 };
 
@@ -147,3 +159,9 @@ gulp.task('clean:all', function(){
 gulp.task('build:all', ['build:css', 'build:js', 'build:html']);
 
 gulp.task('default', ['build:all']);
+
+gulp.task('watch', function(){
+    gulp.watch(paths.watch.pages, ['build:html']);
+    gulp.watch(paths.watch.scripts, ['build:js']);
+    gulp.watch(paths.watch.styles, ['build:css']);
+});
