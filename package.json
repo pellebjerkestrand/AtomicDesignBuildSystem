@@ -4,8 +4,10 @@
   "description": "A Gulp based build system using Atomic Design and SemVer",
   "author": "Pelle Bjerkestrand <pelle@pellebjerkestrand.net>",
   "license": "WTFPL",
+  "repository": "https://github.com/pellebjerkestrand/AtomicDesignBuildSystem.git",
   "devDependencies": {
     "amd-optimize": "0.4.3",
+    "browser-sync": "2.2.1",
     "del": "1.1.1",
     "fs": "0.0.2",
     "gulp": "3.8.11",
@@ -13,6 +15,7 @@
     "gulp-concat": "2.4.3",
     "gulp-css-globbing": "0.1.5",
     "gulp-data": "1.2.0",
+    "gulp-filter": "2.0.2",
     "gulp-jshint": "1.9.2",
     "gulp-minify-css": "0.4.5",
     "gulp-rename": "1.2.0",

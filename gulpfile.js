@@ -3,6 +3,7 @@ var meta = require('./package.json');
 var project = meta.name.toLowerCase();
 
 var amd = require('amd-optimize'),
+    sync = require('browser-sync'),
     del = require('del'),
     fs = require('fs'),
     gulp = require('gulp'),
@@ -10,6 +11,7 @@ var amd = require('amd-optimize'),
     concat = require('gulp-concat'),
     glob = require('gulp-css-globbing'),
     data = require('gulp-data'),
+    filter = require('gulp-filter'),
     jshint = require('gulp-jshint'),
     minify = require('gulp-minify-css'),
     rename = require('gulp-rename'),
@@ -116,7 +118,9 @@ gulp.task('build:css', ['clean:css'], function(){
         .pipe(gulp.dest(paths.dist.css))
         .pipe(rename(project + '.min.css'))
         .pipe(minify(options.minify))
-        .pipe(gulp.dest(paths.dist.css));
+        .pipe(gulp.dest(paths.dist.css))
+        .pipe(filter('**/*.css'))
+        .pipe(sync.reload({ stream: true }));
 });
 
 gulp.task('clean:js', function(){
@@ -161,7 +165,19 @@ gulp.task('build:all', ['build:css', 'build:js', 'build:html']);
 gulp.task('default', ['build:all']);
 
 gulp.task('watch', function(){
-    gulp.watch(paths.watch.pages, ['build:html']);
-    gulp.watch(paths.watch.scripts, ['build:js']);
+    gulp.watch(paths.watch.pages, ['build:html', sync.reload]);
+    gulp.watch(paths.watch.scripts, ['build:js', sync.reload]);
     gulp.watch(paths.watch.styles, ['build:css']);
+});
+
+gulp.task('sync', ['build:all', 'watch'], function(){
+    sync({
+        files: [
+            '!' + dist + '**/*.js'
+        ],
+        server: {
+            baseDir: dist,
+            directory: true
+        }
+    });
 });
