@@ -127,12 +127,6 @@ if [ -d "$DEPLOYMENT_SOURCE/dist" ]; then
     cp -R "$DEPLOYMENT_SOURCE/dist/" "$DEPLOYMENT_TARGET/dist/"
 fi
 
-#echo KuduSync
-#if [[ "$IN_PLACE_DEPLOYMENT" -ne "1" ]]; then
-#  "$KUDU_SYNC_CMD" -v 50 -f "$DEPLOYMENT_SOURCE/dist/" -t "$DEPLOYMENT_TARGET" -n "$NEXT_MANIFEST_PATH" -p "$PREVIOUS_MANIFEST_PATH" -i ".git;.hg;.deployment;deploy.sh"
-#  exitWithMessageOnError "Kudu Sync failed"
-#fi
-
 ##################################################################################################################################
 
 # Post deployment stub
