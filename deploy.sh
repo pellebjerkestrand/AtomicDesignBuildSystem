@@ -117,7 +117,7 @@ exitWithMessageOnError "gulp global install failed"
 
 echo Execute Gulp build
 if [ -e "gulpfile.js" ]; then
-    eval gulp
+    eval ./node_modules/.bin/gulp build
     exitWithMessageOnError "gulp failed"
     cd - > /dev/null
 fi
