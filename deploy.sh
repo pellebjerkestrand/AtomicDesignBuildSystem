@@ -111,6 +111,10 @@ if [ -e "$DEPLOYMENT_TARGET/package.json" ]; then
   cd - > /dev/null
 fi
 
+echo Install Gulp
+eval $NPM_CMD install -g gulp
+exitWithMessageOnError "gulp global install failed"
+
 echo Execute Gulp build
 if [ -e "gulpfile.js" ]; then
     eval gulp
