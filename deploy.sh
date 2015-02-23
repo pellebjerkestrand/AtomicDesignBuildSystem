@@ -116,7 +116,8 @@ eval $NPM_CMD install -g gulp
 exitWithMessageOnError "gulp global install failed"
 
 echo Execute Gulp build
-if [ -e "gulpfile.js" ]; then
+if [ -e "$DEPLOYMENT_TARGET/gulpfile.js" ]; then
+    cd "$DEPLOYMENT_TARGET"
     eval ./node_modules/.bin/gulp build
     exitWithMessageOnError "gulp failed"
     cd - > /dev/null
