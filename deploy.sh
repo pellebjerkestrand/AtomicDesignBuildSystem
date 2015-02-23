@@ -98,40 +98,34 @@ selectNodeVersion () {
 # Build
 # ----------
 
-echo Handling build.
+echo Building.
 
-echo Select node version
+# 1. Select node version
 selectNodeVersion
 
-echo Install npm packages
+# 2. Install npm packages
 if [ -e "$DEPLOYMENT_SOURCE/package.json" ]; then
-  cd "$DEPLOYMENT_SOURCE"
-  eval $NPM_CMD install
-  exitWithMessageOnError "npm failed"
-  cd - > /dev/null
+    echo Install npm packages
+    eval $NPM_CMD install
+    exitWithMessageOnError "npm failed"
 fi
 
-echo Install Gulp
-eval $NPM_CMD install -g gulp
-exitWithMessageOnError "gulp global install failed"
-
-echo Execute Gulp build
+# 3. Install and run Gulp
 if [ -e "$DEPLOYMENT_SOURCE/gulpfile.js" ]; then
-    cd "$DEPLOYMENT_SOURCE"
-    eval $DEPLOYMENT_SOURCE/node_modules/.bin/gulp build:all
+    echo Install Gulp
+    eval $NPM_CMD install -g gulp
+    exitWithMessageOnError "gulp global install failed"
+    echo Execute Gulp
+    ./node_modules/.bin/gulp build:all
     exitWithMessageOnError "gulp failed"
-    cd - > /dev/null
 fi
 
-##################################################################################################################################
-# Deployment
-# ----------
-
-echo Handling deployment.
-
-echo Copying ./dist/
-mkdir -p "$DEPLOYMENT_TARGET"
-cp -R "$DEPLOYMENT_SOURCE/dist/" "$DEPLOYMENT_TARGET/dist/"
+# 4. "Deploy"
+if [ -d "$DEPLOYMENT_SOURCE/dist" ]; then
+    echo Copying $DEPLOYMENT_SOURCE/dist/ to $DEPLOYMENT_TARGET/dist/
+    mkdir -p "$DEPLOYMENT_TARGET"
+    cp -R "$DEPLOYMENT_SOURCE/dist/" "$DEPLOYMENT_TARGET/dist/"
+fi
 
 #echo KuduSync
 #if [[ "$IN_PLACE_DEPLOYMENT" -ne "1" ]]; then
