@@ -7,7 +7,6 @@
   "repository": "https://github.com/pellebjerkestrand/AtomicDesignBuildSystem.git",
   "devDependencies": {
     "amd-optimize": "0.4.3",
-    "browser-sync": "2.2.1",
     "del": "1.1.1",
     "fs": "0.0.2",
     "gulp": "3.8.11",

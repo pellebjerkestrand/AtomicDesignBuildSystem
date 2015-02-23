@@ -3,7 +3,7 @@ var meta = require('./package.json');
 var project = meta.name.toLowerCase();
 
 var amd = require('amd-optimize'),
-    sync = require('browser-sync'),
+    //sync = require('browser-sync'),
     del = require('del'),
     fs = require('fs'),
     gulp = require('gulp'),
@@ -119,8 +119,8 @@ gulp.task('build:css', ['clean:css'], function(){
         .pipe(rename(project + '.min.css'))
         .pipe(minify(options.minify))
         .pipe(gulp.dest(paths.dist.css))
-        .pipe(filter('**/*.css'))
-        .pipe(sync.reload({ stream: true }));
+        .pipe(filter('**/*.css'));
+        //.pipe(sync.reload({ stream: true }));
 });
 
 gulp.task('clean:js', function(){
@@ -164,20 +164,21 @@ gulp.task('build:all', ['build:css', 'build:js', 'build:html']);
 
 gulp.task('default', ['build:all']);
 
-gulp.task('watch', function(){
-    gulp.watch(paths.watch.pages, ['build:html', sync.reload]);
-    gulp.watch(paths.watch.scripts, ['build:js', sync.reload]);
-    gulp.watch(paths.watch.styles, ['build:css']);
-});
-
-gulp.task('sync', ['build:all', 'watch'], function(){
-    sync({
-        files: [
-            '!' + dist + '**/*.js'
-        ],
-        server: {
-            baseDir: dist,
-            directory: true
-        }
-    });
-});
+/* NOTE: Browser Sync removed due to requiring native modules. Native modules are not available on Azure Web Sites. */
+//gulp.task('watch', function(){
+//    gulp.watch(paths.watch.pages, ['build:html', sync.reload]);
+//    gulp.watch(paths.watch.scripts, ['build:js', sync.reload]);
+//    gulp.watch(paths.watch.styles, ['build:css']);
+//});
+//
+//gulp.task('sync', ['build:all', 'watch'], function(){
+//    sync({
+//        files: [
+//            '!' + dist + '**/*.js'
+//        ],
+//        server: {
+//            baseDir: dist,
+//            directory: true
+//        }
+//    });
+//});
