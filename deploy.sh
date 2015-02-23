@@ -104,8 +104,8 @@ echo Select node version
 selectNodeVersion
 
 echo Install npm packages
-if [ -e "$DEPLOYMENT_TARGET/package.json" ]; then
-  cd "$DEPLOYMENT_TARGET"
+if [ -e "$DEPLOYMENT_SOURCE/package.json" ]; then
+  cd "$DEPLOYMENT_SOURCE"
   eval $NPM_CMD install
   exitWithMessageOnError "npm failed"
   cd - > /dev/null
@@ -116,9 +116,11 @@ eval $NPM_CMD install -g gulp
 exitWithMessageOnError "gulp global install failed"
 
 echo Execute Gulp build
-if [ -e "gulpfile.js" ]; then
-    eval ./node_modules/.bin/gulp build:all
+if [ -e "$DEPLOYMENT_SOURCE/gulpfile.js" ]; then
+    cd "$DEPLOYMENT_SOURCE"
+    eval $DEPLOYMENT_SOURCE/node_modules/.bin/gulp build:all
     exitWithMessageOnError "gulp failed"
+    cd - > /dev/null
 fi
 
 ##################################################################################################################################
