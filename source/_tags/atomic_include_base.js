@@ -27,7 +27,7 @@ exports.compile = function(compiler, args, type){
 
     for(var i = 0; i < args.length; i++){
         if(args[i] === file){
-            args[i] = file.slice(0, -1) + ".html\"";
+            args[i] = "\"./" + file.slice(1, -1) + ".html\"";
         } else if(args[i] === parentFile){
             var slugs = args[i].split('/'),
                 length = slugs.length;
