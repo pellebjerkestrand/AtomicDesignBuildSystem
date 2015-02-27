@@ -111,6 +111,7 @@ gulp.task('clean:css', function(){
 
 gulp.task('build:css', ['clean:css'], function(){
     return gulp.src(paths.source.styles)
+        .pipe(plumber())
         .pipe(glob(options.glob))
         .pipe(sass())
         .pipe(prefix(options.prefix))
@@ -131,6 +132,7 @@ gulp.task('clean:js', function(){
 
 gulp.task('build:js', ['clean:js'], function(){
     gulp.src(paths.source.scripts)
+        .pipe(plumber())
         .pipe(jshint())
         .pipe(jshint.reporter(stylish))
         .pipe(jshint.reporter('fail'))
