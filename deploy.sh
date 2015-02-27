@@ -100,29 +100,39 @@ selectNodeVersion () {
 
 echo Building.
 
-# 1. Select node version
+# Select node version
 selectNodeVersion
 
-# 2. Install npm packages
+# Install npm packages
 if [ -e "$DEPLOYMENT_SOURCE/package.json" ]; then
-    echo Install npm packages
+    echo Installing npm packages
     eval $NPM_CMD install
     exitWithMessageOnError "npm failed"
 fi
 
-# 3. Install and run Gulp
+# Install and run Gulp
 if [ -e "$DEPLOYMENT_SOURCE/gulpfile.js" ]; then
-    echo Install Gulp
+    echo Installing Gulp
     eval $NPM_CMD install -g gulp
     exitWithMessageOnError "gulp global install failed"
-    echo Execute Gulp
-    ./node_modules/.bin/gulp build:all
+    echo Executing Gulp
+    ./node_modules/.bin/gulp
     exitWithMessageOnError "gulp failed"
 fi
 
-# 4. "Deploy"
+# Install and run Grunt
+if [ -e "$DEPLOYMENT_SOURCE/gruntfile.js" ]; then
+    echo Installing Grunt CLI
+    eval $NPM_CMD install grunt-cli
+    exitWithMessageOnError "grunt-cli install failed"
+    echo Executing Grunt
+    ./node_modules/.bin/grunt
+    exitWithMessageOnError "grunt failed"
+fi
+
+# "Deploy"
 if [ -d "$DEPLOYMENT_SOURCE/dist" ]; then
-    echo Copying $DEPLOYMENT_SOURCE/dist/ to $DEPLOYMENT_TARGET/dist/
+    echo Deploying
     mkdir -p "$DEPLOYMENT_TARGET"
     cp -R "$DEPLOYMENT_SOURCE/dist/" "$DEPLOYMENT_TARGET"
 fi
