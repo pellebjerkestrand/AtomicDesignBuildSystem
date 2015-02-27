@@ -1,4 +1,5 @@
-var base = require('../../node_modules/gulp-swig/node_modules/swig/lib/tags/include.js');
+var base = require('../../node_modules/gulp-swig/node_modules/swig/lib/tags/include.js'),
+    path = require('path');
 
 var ignore = 'ignore',
     missing = 'missing',
@@ -27,9 +28,9 @@ exports.compile = function(compiler, args, type){
 
     for(var i = 0; i < args.length; i++){
         if(args[i] === file){
-            args[i] = "\"./" + file.slice(1, -1) + ".html\"";
-        } else if(args[i] === parentFile){
-            var slugs = args[i].split('/'),
+            args[i] = file.slice(0, -1) + ".html\"";
+        } else if(path.normalize(args[i]) === path.normalize(parentFile)){
+            var slugs = args[i].split(path.sep),
                 length = slugs.length;
 
             for(var j = length; j-- > 0;){
@@ -42,7 +43,7 @@ exports.compile = function(compiler, args, type){
                 }
             }
 
-            args[i] = slugs.join('/');
+            args[i] = slugs.join(path.sep);
         }
     }
 
