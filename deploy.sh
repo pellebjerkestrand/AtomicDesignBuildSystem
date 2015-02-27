@@ -124,7 +124,7 @@ fi
 if [ -d "$DEPLOYMENT_SOURCE/dist" ]; then
     echo Copying $DEPLOYMENT_SOURCE/dist/ to $DEPLOYMENT_TARGET/dist/
     mkdir -p "$DEPLOYMENT_TARGET"
-    cp -R "$DEPLOYMENT_SOURCE/dist/" "$DEPLOYMENT_TARGET/dist/"
+    cp -R "$DEPLOYMENT_SOURCE/dist/" "$DEPLOYMENT_TARGET"
 fi
 
 ##################################################################################################################################
