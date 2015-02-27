@@ -23,7 +23,8 @@ var amd = require('amd-optimize'),
     stylish = require('jshint-stylish'),
     atom = require('./source/_tags/atom.js'),
     molecule = require('./source/_tags/molecule.js'),
-    organism = require('./source/_tags/organism.js');
+    organism = require('./source/_tags/organism.js'),
+    template = require('./source/_tags/template.js');
 
 var dist = './dist/' + meta.version + '/',
     source = './source/';
@@ -82,6 +83,7 @@ var options = {
             swig.setTag(atom.tag, atom.parse, atom.compile);
             swig.setTag(molecule.tag, molecule.parse, molecule.compile);
             swig.setTag(organism.tag, organism.parse, organism.compile);
+            swig.setTag(template.tag, template.parse, template.compile);
         }
     },
     minify: {
