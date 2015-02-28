@@ -53,9 +53,11 @@ selectNodeVersion () {
   fi
 }
 
-
 # Build
 echo "Building."
+
+# Select node version
+selectNodeVersion
 
 # Install npm packages
 if [ -e "$DEPLOYMENT_SOURCE/package.json" ]; then
