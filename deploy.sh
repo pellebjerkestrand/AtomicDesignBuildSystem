@@ -32,18 +32,22 @@ ARTIFACTS=$SCRIPT_DIR/../artifacts
 KUDU_SYNC_CMD=${KUDU_SYNC_CMD//\"}
 
 if [[ ! -n "$DEPLOYMENT_SOURCE" ]]; then
+  echo "Setting DEPLOYMENT_SOURCE."
   DEPLOYMENT_SOURCE=$SCRIPT_DIR
 fi
 
 if [[ ! -n "$NEXT_MANIFEST_PATH" ]]; then
+  echo "Setting NEXT_MANIFEST_PATH."
   NEXT_MANIFEST_PATH=$ARTIFACTS/manifest
 
   if [[ ! -n "$PREVIOUS_MANIFEST_PATH" ]]; then
+    echo "Setting PREVIOUS_MANIFEST_PATH."
     PREVIOUS_MANIFEST_PATH=$NEXT_MANIFEST_PATH
   fi
 fi
 
 if [[ ! -n "$DEPLOYMENT_TARGET" ]]; then
+  echo "Setting DEPLOYMENT_TARGET."
   DEPLOYMENT_TARGET=$ARTIFACTS/wwwroot
 else
   KUDU_SERVICE=true
