@@ -21,7 +21,8 @@ ARTIFACTS=$SCRIPT_DIR/../artifacts
 KUDU_SYNC_CMD=${KUDU_SYNC_CMD//\"}
 
 echo "OSTYPE is \"$OSTYPE\"."
-if [[ $OSTYPE == *"windows"* ]]; then
+if [[ $OSTYPE == "msys" ]]; then
+  # Azure reports "msys"
   PATH_SEP="\\"
 else
   PATH_SEP="/"
