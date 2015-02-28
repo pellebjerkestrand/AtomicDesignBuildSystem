@@ -131,10 +131,10 @@ if [ -e "$DEPLOYMENT_SOURCE/gruntfile.js" ]; then
 fi
 
 # "Deploy"
-if [ -d "$DEPLOYMENT_SOURCE/dist" ]; then
+if [ -d "$DEPLOYMENT_SOURCE\\dist" ]; then
     echo "Deploying."
     mkdir -p "$DEPLOYMENT_TARGET"
-    cp -R "$DEPLOYMENT_SOURCE/dist/*" "$DEPLOYMENT_TARGET"
+    cp -R "$DEPLOYMENT_SOURCE\\dist\\*" "$DEPLOYMENT_TARGET"
 fi
 
 ##################################################################################################################################
