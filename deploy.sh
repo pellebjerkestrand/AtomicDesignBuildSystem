@@ -32,30 +32,37 @@ ARTIFACTS=$SCRIPT_DIR/../artifacts
 KUDU_SYNC_CMD=${KUDU_SYNC_CMD//\"}
 
 if [[ ! -n "$DEPLOYMENT_SOURCE" ]]; then
-  echo "Setting DEPLOYMENT_SOURCE."
+  echo "Setting DEPLOYMENT_SOURCE to \"$SCRIPT_DIR\"."
   DEPLOYMENT_SOURCE=$SCRIPT_DIR
+else
+  echo "DEPLOYMENT_SOURCE is \"$DEPLOYMENT_SOURCE\"."
 fi
 
 if [[ ! -n "$NEXT_MANIFEST_PATH" ]]; then
-  echo "Setting NEXT_MANIFEST_PATH."
+  echo "Setting NEXT_MANIFEST_PATH to \"$ARTIFACTS/manifest\"."
   NEXT_MANIFEST_PATH=$ARTIFACTS/manifest
 
   if [[ ! -n "$PREVIOUS_MANIFEST_PATH" ]]; then
-    echo "Setting PREVIOUS_MANIFEST_PATH."
+    echo "Setting PREVIOUS_MANIFEST_PATH to \"$NEXT_MANIFEST_PATH\"."
     PREVIOUS_MANIFEST_PATH=$NEXT_MANIFEST_PATH
+  else
+    echo "PREVIOUS_MANIFEST_PATH is \"$PREVIOUS_MANIFEST_PATH\"."
   fi
+else
+  echo "NEXT_MANIFEST_PATH is \"$NEXT_MANIFEST_PATH\"."
 fi
 
 if [[ ! -n "$DEPLOYMENT_TARGET" ]]; then
-  echo "Setting DEPLOYMENT_TARGET."
+  echo "Setting DEPLOYMENT_TARGET to \"$ARTIFACTS/wwwroot\"."
   DEPLOYMENT_TARGET=$ARTIFACTS/wwwroot
 else
+  echo "DEPLOYMENT_TARGET is \"$DEPLOYMENT_TARGET\"."
   KUDU_SERVICE=true
 fi
 
 if [[ ! -n "$KUDU_SYNC_CMD" ]]; then
   # Install kudu sync
-  echo Installing Kudu Sync
+  echo "Installing Kudu Sync"
   npm install kudusync -g --silent
   exitWithMessageOnError "npm failed"
 
@@ -96,6 +103,9 @@ selectNodeVersion () {
     NPM_CMD=npm
     NODE_EXE=node
   fi
+
+  echo "NPM_CMD is \"$NPM_CMD\"."
+  echo "NODE_EXE is \"$NODE_EXE\"."
 }
 
 ##################################################################################################################################
@@ -138,6 +148,7 @@ fi
 if [ -d "$DEPLOYMENT_SOURCE/dist" ]; then
     echo "Deploying."
     mkdir -p "$DEPLOYMENT_TARGET"
+    echo "Copying \"$DEPLOYMENT_SOURCE/dist/\" to \"$DEPLOYMENT_TARGET\"."
     cp -R "$DEPLOYMENT_SOURCE/dist/" "$DEPLOYMENT_TARGET"
 fi
 
