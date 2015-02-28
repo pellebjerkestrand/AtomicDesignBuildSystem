@@ -1,13 +1,6 @@
 #!/bin/bash
 
-# ----------------------
-# KUDU Deployment Script
-# Version: 0.1.11
-# ----------------------
-
 # Helpers
-# -------
-
 exitWithMessageOnError () {
   if [ ! $? -eq 0 ]; then
     echo "An error has occurred during web site deployment."
@@ -17,19 +10,23 @@ exitWithMessageOnError () {
 }
 
 # Prerequisites
-# -------------
-
 # Verify node.js installed
 hash node 2>/dev/null
 exitWithMessageOnError "Missing node.js executable, please install node.js, if already installed make sure it can be reached from current environment."
 
 # Setup
-# -----
-
 SCRIPT_DIR="${BASH_SOURCE[0]%\\*}"
 SCRIPT_DIR="${SCRIPT_DIR%/*}"
 ARTIFACTS=$SCRIPT_DIR/../artifacts
 KUDU_SYNC_CMD=${KUDU_SYNC_CMD//\"}
+
+echo "OSTYPE is \"$OSTYPE\"."
+if [[ $OSTYPE == *"windows"* ]]; then
+  PATH_SEP="\\"
+else
+  PATH_SEP="/"
+fi
+echo "PATH_SEP is \"$PATH_SEP\"."
 
 if [[ ! -n "$DEPLOYMENT_SOURCE" ]]; then
   echo "Setting DEPLOYMENT_SOURCE to \"$SCRIPT_DIR\"."
@@ -76,8 +73,6 @@ if [[ ! -n "$KUDU_SYNC_CMD" ]]; then
 fi
 
 # Node Helpers
-# ------------
-
 selectNodeVersion () {
   if [[ -n "$KUDU_SELECT_NODE_VERSION_CMD" ]]; then
     SELECT_NODE_VERSION="$KUDU_SELECT_NODE_VERSION_CMD \"$DEPLOYMENT_SOURCE\" \"$DEPLOYMENT_TARGET\" \"$DEPLOYMENT_TEMP\""
@@ -108,10 +103,7 @@ selectNodeVersion () {
   echo "NODE_EXE is \"$NODE_EXE\"."
 }
 
-##################################################################################################################################
 # Build
-# ----------
-
 echo "Building."
 
 # Select node version
@@ -145,14 +137,12 @@ if [ -e "$DEPLOYMENT_SOURCE/gruntfile.js" ]; then
 fi
 
 # "Deploy"
-if [ -d "$DEPLOYMENT_SOURCE/dist" ]; then
+if [ -d "$DEPLOYMENT_SOURCE""$PATH_SEP""dist" ]; then
     echo "Deploying."
     mkdir -p "$DEPLOYMENT_TARGET"
-    echo "Copying \"$DEPLOYMENT_SOURCE/dist/\" to \"$DEPLOYMENT_TARGET\"."
-    cp -R "$DEPLOYMENT_SOURCE/dist/" "$DEPLOYMENT_TARGET"
+    echo "Copying \"$DEPLOYMENT_SOURCE""$PATH_SEP""dist""$PATH_SEP\" to \"$DEPLOYMENT_TARGET\"."
+    cp -R "$DEPLOYMENT_SOURCE""$PATH_SEP""dist""$PATH_SEP" "$DEPLOYMENT_TARGET"
 fi
-
-##################################################################################################################################
 
 # Post deployment stub
 if [[ -n "$POST_DEPLOYMENT_ACTION" ]]; then
