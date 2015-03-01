@@ -81,8 +81,15 @@ require(['ko', 'atoms/atom'], function(ko){
 Run `npm install` to get the dependencies.
 Run `gulp` to build.
 
+## Deployment & Hosting
+`.deployment` and `deploy.sh` take care of building and deploying to an Azure Website, so hosting in one of those is easy as pie. Just link the GitHub repository to the Azure Website and it will auto build and deploy on each commit. Linking repositories that are hosted elsewhere is also easy but might result in you having to set up web hooks manually.
+
+An Azure Website can be had [for free](http://azure.microsoft.com/nb-no/pricing/details/websites/) if you don't need much bandwidth.
+
+This repo currently builds and deploys on [adbs.azurewebsites.net](adbs.azurewebsites.net).
+
 ## TODO (maybe)
+- Website for the system
 - Support for testing
 - Watching files to trigger build
-- Built in web server
 - Style guide site generation
