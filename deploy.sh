@@ -141,7 +141,7 @@ fi
 if [ -d "$DEPLOYMENT_SOURCE""$PATH_SEP""dist" ]; then
     echo "Deploying."
     mkdir -p "$DEPLOYMENT_TARGET"
-    DEP="$DEPLOYMENT_SOURCE""$PATH_SEP""dist""$PATH_SEP""*"
+    DEP="$DEPLOYMENT_SOURCE""$PATH_SEP""dist""$PATH_SEP""."
     echo "Copying \"$DEP\" to \"$DEPLOYMENT_TARGET\"."
     cp -R $DEP "$DEPLOYMENT_TARGET"
 fi
