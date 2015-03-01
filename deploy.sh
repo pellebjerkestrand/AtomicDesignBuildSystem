@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 
 # Helpers
 exitWithMessageOnError () {
@@ -15,12 +15,19 @@ hash node 2>/dev/null
 exitWithMessageOnError "Missing node.js executable, please install node.js, if already installed make sure it can be reached from current environment."
 
 # Setup
-echo "OSTYPE is \"$OSTYPE\"."
 SCRIPT_DIR="${BASH_SOURCE[0]%\\*}"
 SCRIPT_DIR="${SCRIPT_DIR%/*}"
 ARTIFACTS=$SCRIPT_DIR/../artifacts
 KUDU_SYNC_CMD=${KUDU_SYNC_CMD//\"}
-BUILD_DIR="dist"
+
+echo "OSTYPE is \"$OSTYPE\"."
+if [[ $OSTYPE == "msys" ]]; then
+  # Azure reports "msys"
+  PATH_SEP="\\"
+else
+  PATH_SEP="/"
+fi
+echo "PATH_SEP is \"$PATH_SEP\"."
 
 if [[ ! -n "$DEPLOYMENT_SOURCE" ]]; then
   echo "Setting DEPLOYMENT_SOURCE to \"$SCRIPT_DIR\"."
@@ -131,12 +138,12 @@ if [ -e "$DEPLOYMENT_SOURCE/gruntfile.js" ]; then
 fi
 
 # "Deploy"
-if [ -d "$DEPLOYMENT_SOURCE/$BUILD_DIR" ]; then
+if [ -d "$DEPLOYMENT_SOURCE""$PATH_SEP""dist" ]; then
     echo "Deploying."
     mkdir -p "$DEPLOYMENT_TARGET"
-    DEP="$DEPLOYMENT_SOURCE/$BUILD_DIR/."
+    DEP="$DEPLOYMENT_SOURCE""$PATH_SEP""dist""$PATH_SEP""."
     echo "Copying \"$DEP\" to \"$DEPLOYMENT_TARGET\"."
-    cp -R "$DEP" "$DEPLOYMENT_TARGET"
+    cp -R $DEP "$DEPLOYMENT_TARGET"
 fi
 
 # Post deployment stub
