@@ -1,6 +1,6 @@
 var meta = require('./package.json');
 
-var project = meta.name.toLowerCase();
+var project = meta.name.replace(/\s+/g, '').toLowerCase();
 
 var amd = require('amd-optimize'),
     del = require('del'),
@@ -8,6 +8,7 @@ var amd = require('amd-optimize'),
     gulp = require('gulp'),
     prefix = require('gulp-autoprefixer'),
     concat = require('gulp-concat'),
+    file = require('gulp-file'),
     glob = require('gulp-css-globbing'),
     data = require('gulp-data'),
     filter = require('gulp-filter'),
@@ -26,14 +27,17 @@ var amd = require('amd-optimize'),
     organism = require('./source/_tags/organism.js'),
     template = require('./source/_tags/template.js');
 
-var dist = './dist/' + meta.version + '/',
+var dist = './dist/',
+    version = dist + meta.version + '/',
+    latest = 'latest.json',
     source = './source/';
 
 var paths = {
     dist: {
-        css: dist,
-        js: dist,
-        pages: dist + 'pages/'
+        latest: dist + latest,
+        css: version,
+        js: version,
+        pages: version + 'pages/'
     },
     source: {
         data: source + 'data/',
@@ -162,6 +166,20 @@ gulp.task('clean:all', function(){
     del.sync(dist);
 });
 
-gulp.task('build:all', ['build:css', 'build:js', 'build:html']);
+gulp.task('clean:latest', function(){
+    del.sync(paths.dist.latest);
+});
+
+gulp.task('build:latest', ['clean:latest'], function(){
+    file(latest, JSON.stringify({
+            name: meta.name,
+            version: meta.version,
+            css: meta.version + '/' + project + '.min.css',
+            js: meta.version + '/' + project + '.min.js'
+        }), { src: true })
+        .pipe(gulp.dest(dist));
+});
+
+gulp.task('build:all', ['build:css', 'build:js', 'build:html', 'build:latest']);
 
 gulp.task('default', ['build:all']);

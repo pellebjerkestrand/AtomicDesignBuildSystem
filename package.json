@@ -1,5 +1,5 @@
 {
-  "name": "AtomicDesignBuildSystem",
+  "name": "Atomic Design Build System",
   "version": "1.0.0-alpha",
   "description": "A Gulp based build system using Atomic Design and SemVer",
   "keywords": [
@@ -23,6 +23,7 @@
     "gulp-concat": "2.5.2",
     "gulp-css-globbing": "0.1.6",
     "gulp-data": "1.2.0",
+    "gulp-file": "0.2.0",
     "gulp-filter": "2.0.2",
     "gulp-jshint": "1.9.2",
     "gulp-minify-css": "0.5.1",
