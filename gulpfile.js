@@ -1,6 +1,6 @@
 var meta = require('./package.json');
 
-var project = meta.name.replace(/\s+/g, '').toLowerCase();
+var project = meta.name.toLowerCase();
 
 var amd = require('amd-optimize'),
     del = require('del'),
