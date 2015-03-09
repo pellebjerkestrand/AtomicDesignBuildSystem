@@ -88,6 +88,8 @@ An Azure Website can be had [for free](http://azure.microsoft.com/nb-no/pricing/
 
 This repo currently builds and deploys on [adbs.azurewebsites.net](adbs.azurewebsites.net).
 
+[![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://azuredeploy.net/?repository=https://github.com/pellebjerkestrand/AtomicDesignBuildSystem)
+
 ## TODO (maybe)
 - Website for the system
 - Support for testing
