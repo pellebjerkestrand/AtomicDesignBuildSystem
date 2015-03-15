@@ -1,5 +1,7 @@
 # Atomic Design Build System
 
+http://pellebjerkestrand.github.io/AtomicDesignBuildSystem
+
 A set of tools and helpers to make creating frontend using [Atomic Design](http://bradfrost.com/blog/post/atomic-web-design/) easier.
 
 Atoms, molecules, organisms, templates and pages all go in their respective directories (f.ex. `./source/atoms/link.html`).
@@ -96,7 +98,6 @@ This repo's `develop` branch currently builds and deploys on [adbs-dev.azurewebs
 [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://azuredeploy.net/?repository=https://github.com/pellebjerkestrand/AtomicDesignBuildSystem)
 
 ## TODO (maybe)
-- Website for the system
 - Support for testing
 - Style guide site generation
 - Handle watching of new files
