@@ -86,7 +86,9 @@ Run `gulp` to build.
 
 An Azure Website can be had [for free](http://azure.microsoft.com/nb-no/pricing/details/websites/) if you don't need much bandwidth.
 
-This repo currently builds and deploys on [adbs.azurewebsites.net](adbs.azurewebsites.net).
+This repo's `master` branch currently builds and deploys on [adbs.azurewebsites.net](adbs.azurewebsites.net).
+
+This repo's `develop` branch currently builds and deploys on [adbs-dev.azurewebsites.net](adbs-dev.azurewebsites.net).
 
 [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://azuredeploy.net/?repository=https://github.com/pellebjerkestrand/AtomicDesignBuildSystem)
 
