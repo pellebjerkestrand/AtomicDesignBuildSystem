@@ -84,6 +84,10 @@ var options = {
     },
     swig: {
         setup: function(swig){
+            swig.setDefaults({
+                cache: false
+            });
+
             swig.setTag(atom.tag, atom.parse, atom.compile);
             swig.setTag(molecule.tag, molecule.parse, molecule.compile);
             swig.setTag(organism.tag, organism.parse, organism.compile);
@@ -183,3 +187,11 @@ gulp.task('build:latest', ['clean:latest'], function(){
 gulp.task('build:all', ['build:css', 'build:js', 'build:html', 'build:latest']);
 
 gulp.task('default', ['build:all']);
+
+gulp.task('watch', function(){
+    gulp.watch(paths.watch.pages, ['build:html']);
+    gulp.watch(paths.watch.scripts, ['build:js']);
+    gulp.watch(paths.watch.styles, ['build:css']);
+});
+
+gulp.task('dev', ['build:all', 'watch']);
