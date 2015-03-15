@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Atomic Design Build System by pellebjerkestrand</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Atomic Design Build System</h1>
+        <p>A Gulp based build system using Atomic Design, SemVer, AMD, Knockout Components, SASS, Swig</p>
+
+        <p class="view"><a href="https://github.com/pellebjerkestrand/AtomicDesignBuildSystem">View the Project on GitHub <small>pellebjerkestrand/AtomicDesignBuildSystem</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/pellebjerkestrand/AtomicDesignBuildSystem/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/pellebjerkestrand/AtomicDesignBuildSystem/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/pellebjerkestrand/AtomicDesignBuildSystem">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="atomic-design-build-system" class="anchor" href="#atomic-design-build-system" aria-hidden="true"><span class="octicon octicon-link"></span></a>Atomic Design Build System</h1>
+
+<p>A set of tools and helpers to make creating frontend using <a href="http://bradfrost.com/blog/post/atomic-web-design/">Atomic Design</a> easier.</p>
+
+<p>Atoms, molecules, organisms, templates and pages all go in their respective directories (f.ex. <code>./source/atoms/link.html</code>).</p>
+
+<h2>
+<a id="templating" class="anchor" href="#templating" aria-hidden="true"><span class="octicon octicon-link"></span></a>Templating</h2>
+
+<p>Templating is done using <a href="http://paularmstrong.github.io/swig/">Swig</a>.</p>
+
+<p>There are custom tags for Atomic Design concepts:</p>
+
+<p>Atom: <code>{% atom "link" %}</code></p>
+
+<p>Molecule: <code>{% molecule "link-list" %}</code></p>
+
+<p>Organism: <code>{% organism "header" %}</code></p>
+
+<p>Template: <code>{% template "article" %}</code></p>
+
+<p>These are all variations of the Swig <code>include</code> tag and support the same things it does.</p>
+
+<h3>
+<a id="pages-and-data" class="anchor" href="#pages-and-data" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pages and Data</h3>
+
+<p>In Atomic Design, a page is an instance of a template with some data.</p>
+
+<p>A JSON file in <code>./source/data/</code> with the same name as an HTML file in <code>./source/pages/</code> is passed to the page during the build process.</p>
+
+<h2>
+<a id="styles-scss" class="anchor" href="#styles-scss" aria-hidden="true"><span class="octicon octicon-link"></span></a>Styles (SCSS)</h2>
+
+<p>Just add your SCSS files to the appropriate directory (atoms, molecules etc.) and the build process will take care of finding them and including them in the SASS build.</p>
+
+<p>This is done through globbing in <code>./source/global/app.scss</code>. SASS does not support globbing natively, so this is added using <code>gulp-css-globbing</code>.</p>
+
+<h2>
+<a id="javascript-components" class="anchor" href="#javascript-components" aria-hidden="true"><span class="octicon octicon-link"></span></a>JavaScript Components</h2>
+
+<p>The applications JavaScript is componentized using AMD. Components can be included in any Atomic Design directory, but must be registered as a dependency in <code>./source/global/app.js</code> to be included in the build.</p>
+
+<h3>
+<a id="knockout-components" class="anchor" href="#knockout-components" aria-hidden="true"><span class="octicon octicon-link"></span></a>Knockout Components</h3>
+
+<p>Each component is a <a href="http://knockoutjs.com">Knockout</a> <a href="http://knockoutjs.com/documentation/component-overview.html">Component</a>.</p>
+
+<p>Example:</p>
+
+<pre><code>define(['ko', 'text!./atom.tmpl.html'], function(ko, tmpl){
+    function Atom(){
+        var self = this;
+
+        self.text = ko.observable('atom');
+    }
+
+    return {
+        viewModel: Atom,
+        template: tmpl
+    };
+});
+</code></pre>
+
+<h3>
+<a id="knockout-templates" class="anchor" href="#knockout-templates" aria-hidden="true"><span class="octicon octicon-link"></span></a>Knockout Templates</h3>
+
+<p>Templates are by convention placed in the same directory as the component with the name <code>{component}.tmpl.html</code>.</p>
+
+<p>Example:</p>
+
+<pre><code>&lt;div class="atom"&gt;
+    &lt;input type="text" data-bind="textInput: text" /&gt;
+    &lt;span data-bind="text: text"&gt;&lt;/span&gt;
+&lt;/div&gt;
+</code></pre>
+
+<h3>
+<a id="registering" class="anchor" href="#registering" aria-hidden="true"><span class="octicon octicon-link"></span></a>Registering</h3>
+
+<p>Registering a component is done as follows:</p>
+
+<pre><code>require(['ko', 'atoms/atom'], function(ko){
+    ko.components.register('atom', {
+        require: 'atoms/atom'
+    });
+
+    ko.applyBindings();
+});
+</code></pre>
+
+<h2>
+<a id="building" class="anchor" href="#building" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building</h2>
+
+<p>Run <code>npm install</code> to get the dependencies.
+Run <code>gulp</code> to build.</p>
+
+<h2>
+<a id="automatic-build-while-developing" class="anchor" href="#automatic-build-while-developing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Automatic Build While Developing</h2>
+
+<p>Run <code>gulp dev</code> and watchers will be set up for building HTML, CSS and JS when relevant files change.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/pellebjerkestrand">pellebjerkestrand</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
