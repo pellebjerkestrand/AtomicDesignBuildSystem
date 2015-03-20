@@ -131,7 +131,7 @@ var getComponents = function(componentDirectory, componentType){
     for(var i = 0; i < files.length; i++){
         components.push({
             name:  files[i],
-            file: '../' + componentType + '/' + files[i]
+            file: '../' + componentType + 's/' + files[i]
         });
     }
 
@@ -196,7 +196,7 @@ gulp.task('clean:atoms', function(){
 });
 
 gulp.task('build:atoms', ['clean:atoms'], function(){
-    var components = getComponents('./source/atoms', 'atoms');
+    var components = getComponents('./source/atoms', 'atom');
 
     return gulp.src(paths.source.atoms)
         .pipe(plumber())
@@ -214,7 +214,7 @@ gulp.task('clean:molecules', function(){
 });
 
 gulp.task('build:molecules', ['clean:molecules'], function(){
-    var components = getComponents('./source/molecules', 'molecules');
+    var components = getComponents('./source/molecules', 'molecule');
 
     return gulp.src(paths.source.molecules)
         .pipe(plumber())
@@ -232,7 +232,7 @@ gulp.task('clean:organisms', function(){
 });
 
 gulp.task('build:organisms', ['clean:organisms'], function(){
-    var components = getComponents('./source/organisms', 'organisms');
+    var components = getComponents('./source/organisms', 'organism');
 
     return gulp.src(paths.source.organisms)
         .pipe(plumber())
