@@ -3,7 +3,10 @@
     {% for component in components %}
         <div class="sg-component-wrapper">
             <h2 class="sg-component-title">{{ component.name }}</h2>
-            {% include component.file %}
+            <p class="sg-component-description">{{ component.description }}</p>
+            <div class="sg-component">
+                {% include component.file %}
+            </div>
         </div>
     {% endfor %}
 {% endblock %}

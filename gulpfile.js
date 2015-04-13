@@ -51,9 +51,7 @@ var paths = {
             '!' + source + '_tags/*.js'
         ],
         styles: source + 'global/app.scss',
-        atoms: source + '_guide/atoms.html',
-        molecules: source + '_guide/molecules.html',
-        organisms: source + '_guide/organisms.html'
+        components: source + '_guide/components.html'
     },
     watch: {
         pages: [
@@ -125,14 +123,20 @@ var getComponents = function(componentDirectory, componentType){
         components = [];
 
     files = files.filter(function(element, index, array){
-        return element.indexOf('.html') > -1 && element.indexOf('.tmpl.html') === -1;
+        return element.indexOf('.json') > -1;
     });
 
     for(var i = 0; i < files.length; i++){
-        components.push({
-            name:  files[i],
-            file: '../' + componentType + 's/' + files[i]
-        });
+        var filePath = componentDirectory + '/' + files[i];
+        if(fs.existsSync(filePath)){
+            var component = require(filePath);
+
+            components.push({
+                name:  component.name || component.file,
+                description: component.description || '',
+                file: '../' + componentType + 's/' + component.file
+            });
+        }
     }
 
     return components;
@@ -198,7 +202,7 @@ gulp.task('clean:atoms', function(){
 gulp.task('build:atoms', ['clean:atoms'], function(){
     var components = getComponents('./source/atoms', 'atom');
 
-    return gulp.src(paths.source.atoms)
+    return gulp.src(paths.source.components)
         .pipe(plumber())
         .pipe(data(function(){
             return {
@@ -206,6 +210,7 @@ gulp.task('build:atoms', ['clean:atoms'], function(){
             };
         }))
         .pipe(swig(options.swig))
+        .pipe(rename('atoms.html'))
         .pipe(gulp.dest(paths.dist.components));
 });
 
@@ -216,7 +221,7 @@ gulp.task('clean:molecules', function(){
 gulp.task('build:molecules', ['clean:molecules'], function(){
     var components = getComponents('./source/molecules', 'molecule');
 
-    return gulp.src(paths.source.molecules)
+    return gulp.src(paths.source.components)
         .pipe(plumber())
         .pipe(data(function(){
             return {
@@ -224,6 +229,7 @@ gulp.task('build:molecules', ['clean:molecules'], function(){
             };
         }))
         .pipe(swig(options.swig))
+        .pipe(rename('molecules.html'))
         .pipe(gulp.dest(paths.dist.components));
 });
 
@@ -234,7 +240,7 @@ gulp.task('clean:organisms', function(){
 gulp.task('build:organisms', ['clean:organisms'], function(){
     var components = getComponents('./source/organisms', 'organism');
 
-    return gulp.src(paths.source.organisms)
+    return gulp.src(paths.source.components)
         .pipe(plumber())
         .pipe(data(function(){
             return {
@@ -242,6 +248,7 @@ gulp.task('build:organisms', ['clean:organisms'], function(){
             };
         }))
         .pipe(swig(options.swig))
+        .pipe(rename('organisms.html'))
         .pipe(gulp.dest(paths.dist.components));
 });
 
