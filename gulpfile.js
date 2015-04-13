@@ -206,6 +206,7 @@ gulp.task('build:atoms', ['clean:atoms'], function(){
         .pipe(plumber())
         .pipe(data(function(){
             return {
+                title: 'Atoms',
                 components: components
             };
         }))
@@ -225,6 +226,7 @@ gulp.task('build:molecules', ['clean:molecules'], function(){
         .pipe(plumber())
         .pipe(data(function(){
             return {
+                title: 'Molecules',
                 components: components
             };
         }))
@@ -244,6 +246,7 @@ gulp.task('build:organisms', ['clean:organisms'], function(){
         .pipe(plumber())
         .pipe(data(function(){
             return {
+                title: 'Organisms',
                 components: components
             };
         }))

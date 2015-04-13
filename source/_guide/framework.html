@@ -6,7 +6,14 @@
     <link rel="stylesheet" href="../atomicdesignbuildsystem.min.css" />
 </head>
 <body>
-{% block body %}
-{% endblock %}
+    <header class="sg-components-header">
+    {% block header %}
+    {% endblock %}
+    </header>
+
+    <div class="sg-components">
+    {% block components %}
+    {% endblock %}
+    </div>
 </body>
 </html>
