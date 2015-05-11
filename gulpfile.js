@@ -38,10 +38,13 @@ var paths = {
         css: version,
         js: version,
         pages: version + 'pages/',
-        components: version + 'guide/',
-        atoms: version + 'guide/atoms.html',
-        molecules: version + 'guide/molecules.html',
-        organisms: version + 'guide/organisms.html'
+        components: {
+            css: version + 'guide/',
+            root: version + 'guide/',
+            atoms: version + 'guide/atoms.html',
+            molecules: version + 'guide/molecules.html',
+            organisms: version + 'guide/organisms.html'
+        }
     },
     source: {
         data: source + 'data/',
@@ -51,7 +54,10 @@ var paths = {
             '!' + source + '_tags/*.js'
         ],
         styles: source + 'global/app.scss',
-        components: source + '_guide/components.html'
+        components: {
+            styles: source + '_guide/*.scss',
+            html: source + '_guide/components.html'
+        }
     },
     watch: {
         pages: [
@@ -196,13 +202,13 @@ gulp.task('build:html', ['clean:html'], function(){
 });
 
 gulp.task('clean:atoms', function(){
-    del.sync(paths.dist.atoms);
+    del.sync(paths.dist.components.atoms);
 });
 
 gulp.task('build:atoms', ['clean:atoms'], function(){
     var components = getComponents('./source/atoms', 'atom');
 
-    return gulp.src(paths.source.components)
+    return gulp.src(paths.source.components.html)
         .pipe(plumber())
         .pipe(data(function(){
             return {
@@ -212,17 +218,17 @@ gulp.task('build:atoms', ['clean:atoms'], function(){
         }))
         .pipe(swig(options.swig))
         .pipe(rename('atoms.html'))
-        .pipe(gulp.dest(paths.dist.components));
+        .pipe(gulp.dest(paths.dist.components.root));
 });
 
 gulp.task('clean:molecules', function(){
-    del.sync(paths.dist.molecules);
+    del.sync(paths.dist.components.molecules);
 });
 
 gulp.task('build:molecules', ['clean:molecules'], function(){
     var components = getComponents('./source/molecules', 'molecule');
 
-    return gulp.src(paths.source.components)
+    return gulp.src(paths.source.components.html)
         .pipe(plumber())
         .pipe(data(function(){
             return {
@@ -232,17 +238,17 @@ gulp.task('build:molecules', ['clean:molecules'], function(){
         }))
         .pipe(swig(options.swig))
         .pipe(rename('molecules.html'))
-        .pipe(gulp.dest(paths.dist.components));
+        .pipe(gulp.dest(paths.dist.components.root));
 });
 
 gulp.task('clean:organisms', function(){
-    del.sync(paths.dist.organisms);
+    del.sync(paths.dist.components.organisms);
 });
 
 gulp.task('build:organisms', ['clean:organisms'], function(){
     var components = getComponents('./source/organisms', 'organism');
 
-    return gulp.src(paths.source.components)
+    return gulp.src(paths.source.components.html)
         .pipe(plumber())
         .pipe(data(function(){
             return {
@@ -252,10 +258,28 @@ gulp.task('build:organisms', ['clean:organisms'], function(){
         }))
         .pipe(swig(options.swig))
         .pipe(rename('organisms.html'))
-        .pipe(gulp.dest(paths.dist.components));
+        .pipe(gulp.dest(paths.dist.components.root));
 });
 
-gulp.task('build:components', ['build:atoms', 'build:molecules', 'build:organisms']);
+gulp.task('clean:component-css', function(){
+    del.sync(paths.dist.components.css + '*.css');
+});
+
+gulp.task('build:component-css', ['clean:component-css'], function(){
+    return gulp.src(paths.source.components.styles)
+        .pipe(plumber())
+        .pipe(glob(options.glob))
+        .pipe(sass())
+        .pipe(prefix(options.prefix))
+        .pipe(rename('guide.css'))
+        .pipe(gulp.dest(paths.dist.components.css))
+        .pipe(rename('guide.min.css'))
+        .pipe(minify(options.minify))
+        .pipe(gulp.dest(paths.dist.components.css))
+        .pipe(filter('**/*.css'));
+});
+
+gulp.task('build:components', ['build:atoms', 'build:molecules', 'build:organisms', 'build:component-css']);
 
 gulp.task('clean:all', function(){
     del.sync(dist);
