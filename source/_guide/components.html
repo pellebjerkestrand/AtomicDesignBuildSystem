@@ -1,0 +1,17 @@
+{% extends "framework.html" %}
+
+{% block header %}
+    <h1 class="sg-components-title">{{ title }}</h1>
+{% endblock %}
+
+{% block components %}
+    {% for component in components %}
+        <div class="sg-component-wrapper">
+            <h2 class="sg-component-title">{{ component.name }}</h2>
+            <p class="sg-component-description">{{ component.description }}</p>
+            <div class="sg-component">
+                {% include component.file %}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
