@@ -32,7 +32,9 @@ Just add your SCSS files to the appropriate directory (atoms, molecules etc.) an
 This is done through globbing in `./source/global/app.scss`. SASS does not support globbing natively, so this is added using `gulp-css-globbing`.
 
 ## JavaScript Components
-The applications JavaScript is componentized using AMD. Components can be included in any Atomic Design directory, but must be registered as a dependency in `./source/global/app.js` to be included in the build.
+The application's JavaScript is componentized using AMD.
+
+Components are by convention placed in `./source/components/`, but must be registered as a dependency in `./source/global/app.js` to be included in the build.
 
 ### Knockout Components
 Each component is a [Knockout](http://knockoutjs.com) [Component](http://knockoutjs.com/documentation/component-overview.html).
@@ -40,27 +42,27 @@ Each component is a [Knockout](http://knockoutjs.com) [Component](http://knockou
 Example:
 
 ```
-define(['ko', 'text!./atom.tmpl.html'], function(ko, tmpl){
-    function Atom(){
+define(['ko', 'text!./foo.tmpl.html'], function(ko, tmpl){
+    function Foo(){
         var self = this;
 
-        self.text = ko.observable('atom');
+        self.text = ko.observable('foo');
     }
 
     return {
-        viewModel: Atom,
+        viewModel: Foo,
         template: tmpl
     };
 });
 ```
 
 ### Knockout Templates
-Templates are by convention placed in the same directory as the component with the name `{component}.tmpl.html`.
+Templates are by convention placed in the same directory as the component (`./source/components/`) with the name `{component-name}.tmpl.html`.
 
 Example:
 
 ```
-<div class="atom">
+<div class="foo">
     <input type="text" data-bind="textInput: text" />
     <span data-bind="text: text"></span>
 </div>
@@ -70,9 +72,9 @@ Example:
 Registering a component is done as follows:
 
 ```
-require(['ko', 'atoms/atom'], function(ko){
-    ko.components.register('atom', {
-        require: 'atoms/atom'
+require(['ko', 'components/foo'], function(ko){
+    ko.components.register('foo', {
+        require: 'components/foo'
     });
 
     ko.applyBindings();

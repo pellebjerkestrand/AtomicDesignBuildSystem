@@ -83,7 +83,7 @@ var options = {
             organisms: 'organisms',
             require: '../node_modules/requirejs/require',
             text: '../node_modules/requirejs-text/text',
-            ko: '../node_modules/knockout/build/output/knockout-latest'
+            ko: '../node_modules/knockout/build/output/knockout-latest.debug'
         }
     },
     prefix: {
