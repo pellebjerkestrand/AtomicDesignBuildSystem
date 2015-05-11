@@ -37,7 +37,14 @@ var paths = {
         latest: dist + latest,
         css: version,
         js: version,
-        pages: version + 'pages/'
+        pages: version + 'pages/',
+        components: {
+            css: version + 'guide/',
+            root: version + 'guide/',
+            atoms: version + 'guide/atoms.html',
+            molecules: version + 'guide/molecules.html',
+            organisms: version + 'guide/organisms.html'
+        }
     },
     source: {
         data: source + 'data/',
@@ -46,7 +53,11 @@ var paths = {
             source + '**/*.js',
             '!' + source + '_tags/*.js'
         ],
-        styles: source + 'global/app.scss'
+        styles: source + 'global/app.scss',
+        components: {
+            styles: source + '_guide/*.scss',
+            html: source + '_guide/components.html'
+        }
     },
     watch: {
         pages: [
@@ -72,7 +83,7 @@ var options = {
             organisms: 'organisms',
             require: '../node_modules/requirejs/require',
             text: '../node_modules/requirejs-text/text',
-            ko: '../node_modules/knockout/build/output/knockout-latest'
+            ko: '../node_modules/knockout/build/output/knockout-latest.debug'
         }
     },
     prefix: {
@@ -111,6 +122,30 @@ var getJson = function(file){
     }
 
     return {};
+};
+
+var getComponents = function(componentDirectory, componentType){
+    var files = fs.readdirSync(componentDirectory),
+        components = [];
+
+    files = files.filter(function(element, index, array){
+        return element.indexOf('.json') > -1;
+    });
+
+    for(var i = 0; i < files.length; i++){
+        var filePath = componentDirectory + '/' + files[i];
+        if(fs.existsSync(filePath)){
+            var component = require(filePath);
+
+            components.push({
+                name:  component.name || component.file,
+                description: component.description || '',
+                file: '../' + componentType + 's/' + component.file
+            });
+        }
+    }
+
+    return components;
 };
 
 gulp.task('clean:css', function(){
@@ -166,6 +201,86 @@ gulp.task('build:html', ['clean:html'], function(){
         .pipe(gulp.dest(paths.dist.pages));
 });
 
+gulp.task('clean:atoms', function(){
+    del.sync(paths.dist.components.atoms);
+});
+
+gulp.task('build:atoms', ['clean:atoms'], function(){
+    var components = getComponents('./source/atoms', 'atom');
+
+    return gulp.src(paths.source.components.html)
+        .pipe(plumber())
+        .pipe(data(function(){
+            return {
+                title: 'Atoms',
+                components: components
+            };
+        }))
+        .pipe(swig(options.swig))
+        .pipe(rename('atoms.html'))
+        .pipe(gulp.dest(paths.dist.components.root));
+});
+
+gulp.task('clean:molecules', function(){
+    del.sync(paths.dist.components.molecules);
+});
+
+gulp.task('build:molecules', ['clean:molecules'], function(){
+    var components = getComponents('./source/molecules', 'molecule');
+
+    return gulp.src(paths.source.components.html)
+        .pipe(plumber())
+        .pipe(data(function(){
+            return {
+                title: 'Molecules',
+                components: components
+            };
+        }))
+        .pipe(swig(options.swig))
+        .pipe(rename('molecules.html'))
+        .pipe(gulp.dest(paths.dist.components.root));
+});
+
+gulp.task('clean:organisms', function(){
+    del.sync(paths.dist.components.organisms);
+});
+
+gulp.task('build:organisms', ['clean:organisms'], function(){
+    var components = getComponents('./source/organisms', 'organism');
+
+    return gulp.src(paths.source.components.html)
+        .pipe(plumber())
+        .pipe(data(function(){
+            return {
+                title: 'Organisms',
+                components: components
+            };
+        }))
+        .pipe(swig(options.swig))
+        .pipe(rename('organisms.html'))
+        .pipe(gulp.dest(paths.dist.components.root));
+});
+
+gulp.task('clean:component-css', function(){
+    del.sync(paths.dist.components.css + '*.css');
+});
+
+gulp.task('build:component-css', ['clean:component-css'], function(){
+    return gulp.src(paths.source.components.styles)
+        .pipe(plumber())
+        .pipe(glob(options.glob))
+        .pipe(sass())
+        .pipe(prefix(options.prefix))
+        .pipe(rename('guide.css'))
+        .pipe(gulp.dest(paths.dist.components.css))
+        .pipe(rename('guide.min.css'))
+        .pipe(minify(options.minify))
+        .pipe(gulp.dest(paths.dist.components.css))
+        .pipe(filter('**/*.css'));
+});
+
+gulp.task('build:components', ['build:atoms', 'build:molecules', 'build:organisms', 'build:component-css']);
+
 gulp.task('clean:all', function(){
     del.sync(dist);
 });
@@ -184,7 +299,7 @@ gulp.task('build:latest', ['clean:latest'], function(){
         .pipe(gulp.dest(dist));
 });
 
-gulp.task('build:all', ['build:css', 'build:js', 'build:html', 'build:latest']);
+gulp.task('build:all', ['build:css', 'build:js', 'build:html', 'build:latest', 'build:components']);
 
 gulp.task('default', ['build:all']);
 

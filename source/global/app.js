@@ -1,7 +1,5 @@
-require(['ko', 'atoms/atom'], function(ko){
-    ko.components.register('atom', {
-        require: 'atoms/atom'
-    });
+require(['ko'], function(ko){
+    /* Register components here */
 
     ko.applyBindings();
 });

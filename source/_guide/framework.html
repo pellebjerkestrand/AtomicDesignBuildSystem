@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Style Guide</title>
+    <link rel="stylesheet" href="guide.min.css" />
+    <link rel="stylesheet" href="../atomicdesignbuildsystem.min.css" />
+</head>
+<body class="sg-body">
+    <nav class="sg-navigation">
+        <a href="atoms.html" class="sg-navigation-link">Atoms</a>
+        <a href="molecules.html" class="sg-navigation-link">Molecules</a>
+        <a href="organisms.html" class="sg-navigation-link">Organisms</a>
+    </nav>
+    <div class="sg-components-wrapper">
+        <header class="sg-components-header">
+        {% block header %}
+        {% endblock %}
+        </header>
+    
+        <div class="sg-components">
+        {% block components %}
+        {% endblock %}
+        </div>
+    </div>
+</body>
+</html>
