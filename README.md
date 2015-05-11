@@ -97,7 +97,9 @@ This repo's `develop` branch currently builds and deploys on [adbs-dev.azurewebs
 
 [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://azuredeploy.net/?repository=https://github.com/pellebjerkestrand/AtomicDesignBuildSystem)
 
-## TODO (maybe)
-- Support for testing
+## In Progress
 - Style guide site generation
-- Handle watching of new files
+
+## TODO (maybe)
+- Support for auto discovery and running of tests
+- Handle watching of new files (properly)
