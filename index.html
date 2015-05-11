@@ -1,35 +1,28 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en-us">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta charset="UTF-8">
     <title>Atomic Design Build System by pellebjerkestrand</title>
-
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
   <body>
-    <div class="wrapper">
-      <header>
-        <h1>Atomic Design Build System</h1>
-        <p>A Gulp based build system using Atomic Design, SemVer, AMD, Knockout Components, SASS, Swig</p>
+    <section class="page-header">
+      <h1 class="project-name">Atomic Design Build System</h1>
+      <h2 class="project-tagline">A Gulp based build system using Atomic Design, SemVer, AMD, Knockout Components, SASS, Swig</h2>
+      <a href="https://github.com/pellebjerkestrand/AtomicDesignBuildSystem" class="btn">View on GitHub</a>
+      <a href="https://github.com/pellebjerkestrand/AtomicDesignBuildSystem/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/pellebjerkestrand/AtomicDesignBuildSystem/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-        <p class="view"><a href="https://github.com/pellebjerkestrand/AtomicDesignBuildSystem">View the Project on GitHub <small>pellebjerkestrand/AtomicDesignBuildSystem</small></a></p>
-
-
-        <ul>
-          <li><a href="https://github.com/pellebjerkestrand/AtomicDesignBuildSystem/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/pellebjerkestrand/AtomicDesignBuildSystem/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/pellebjerkestrand/AtomicDesignBuildSystem">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h1>
+    <section class="main-content">
+      <h1>
 <a id="atomic-design-build-system" class="anchor" href="#atomic-design-build-system" aria-hidden="true"><span class="octicon octicon-link"></span></a>Atomic Design Build System</h1>
+
+<p><a href="http://pellebjerkestrand.github.io/AtomicDesignBuildSystem">http://pellebjerkestrand.github.io/AtomicDesignBuildSystem</a></p>
 
 <p>A set of tools and helpers to make creating frontend using <a href="http://bradfrost.com/blog/post/atomic-web-design/">Atomic Design</a> easier.</p>
 
@@ -69,7 +62,9 @@
 <h2>
 <a id="javascript-components" class="anchor" href="#javascript-components" aria-hidden="true"><span class="octicon octicon-link"></span></a>JavaScript Components</h2>
 
-<p>The applications JavaScript is componentized using AMD. Components can be included in any Atomic Design directory, but must be registered as a dependency in <code>./source/global/app.js</code> to be included in the build.</p>
+<p>The application's JavaScript is componentized using AMD.</p>
+
+<p>Components are by convention placed in <code>./source/components/</code>, but must be registered as a dependency in <code>./source/global/app.js</code> to be included in the build.</p>
 
 <h3>
 <a id="knockout-components" class="anchor" href="#knockout-components" aria-hidden="true"><span class="octicon octicon-link"></span></a>Knockout Components</h3>
@@ -78,15 +73,15 @@
 
 <p>Example:</p>
 
-<pre><code>define(['ko', 'text!./atom.tmpl.html'], function(ko, tmpl){
-    function Atom(){
+<pre><code>define(['ko', 'text!./foo.tmpl.html'], function(ko, tmpl){
+    function Foo(){
         var self = this;
 
-        self.text = ko.observable('atom');
+        self.text = ko.observable('foo');
     }
 
     return {
-        viewModel: Atom,
+        viewModel: Foo,
         template: tmpl
     };
 });
@@ -95,11 +90,11 @@
 <h3>
 <a id="knockout-templates" class="anchor" href="#knockout-templates" aria-hidden="true"><span class="octicon octicon-link"></span></a>Knockout Templates</h3>
 
-<p>Templates are by convention placed in the same directory as the component with the name <code>{component}.tmpl.html</code>.</p>
+<p>Templates are by convention placed in the same directory as the component (<code>./source/components/</code>) with the name <code>{component-name}.tmpl.html</code>.</p>
 
 <p>Example:</p>
 
-<pre><code>&lt;div class="atom"&gt;
+<pre><code>&lt;div class="foo"&gt;
     &lt;input type="text" data-bind="textInput: text" /&gt;
     &lt;span data-bind="text: text"&gt;&lt;/span&gt;
 &lt;/div&gt;
@@ -110,9 +105,9 @@
 
 <p>Registering a component is done as follows:</p>
 
-<pre><code>require(['ko', 'atoms/atom'], function(ko){
-    ko.components.register('atom', {
-        require: 'atoms/atom'
+<pre><code>require(['ko', 'components/foo'], function(ko){
+    ko.components.register('foo', {
+        require: 'components/foo'
     });
 
     ko.applyBindings();
@@ -129,13 +124,44 @@ Run <code>gulp</code> to build.</p>
 <a id="automatic-build-while-developing" class="anchor" href="#automatic-build-while-developing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Automatic Build While Developing</h2>
 
 <p>Run <code>gulp dev</code> and watchers will be set up for building HTML, CSS and JS when relevant files change.</p>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/pellebjerkestrand">pellebjerkestrand</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+
+<h2>
+<a id="deployment--hosting" class="anchor" href="#deployment--hosting" aria-hidden="true"><span class="octicon octicon-link"></span></a>Deployment &amp; Hosting</h2>
+
+<p><code>.deployment</code> and <code>deploy.sh</code> take care of building and deploying to an Azure Website, so hosting in one of those is easy as pie. Just link the GitHub repository to the Azure Website and it will auto build and deploy on each commit. Linking repositories that are hosted elsewhere is also easy but might result in you having to set up web hooks manually.</p>
+
+<p>An Azure Website can be had <a href="http://azure.microsoft.com/nb-no/pricing/details/websites/">for free</a> if you don't need much bandwidth.</p>
+
+<p>This repo's <code>master</code> branch currently builds and deploys on <a href="adbs.azurewebsites.net">adbs.azurewebsites.net</a>.</p>
+
+<p>This repo's <code>develop</code> branch currently builds and deploys on <a href="adbs-dev.azurewebsites.net">adbs-dev.azurewebsites.net</a>.</p>
+
+<p><a href="https://azuredeploy.net/?repository=https://github.com/pellebjerkestrand/AtomicDesignBuildSystem"><img src="http://azuredeploy.net/deploybutton.png" alt="Deploy to Azure"></a></p>
+
+<h2>
+<a id="in-progress" class="anchor" href="#in-progress" aria-hidden="true"><span class="octicon octicon-link"></span></a>In Progress</h2>
+
+<ul>
+<li>Style guide site generation</li>
+</ul>
+
+<h2>
+<a id="todo-maybe" class="anchor" href="#todo-maybe" aria-hidden="true"><span class="octicon octicon-link"></span></a>TODO (maybe)</h2>
+
+<ul>
+<li>Support for auto discovery and running of tests</li>
+<li>Handle watching of new files (properly)</li>
+</ul>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/pellebjerkestrand/AtomicDesignBuildSystem">Atomic Design Build System</a> is maintained by <a href="https://github.com/pellebjerkestrand">pellebjerkestrand</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
-    </div>
-    <script src="javascripts/scale.fix.js"></script>
-    
+
+    </section>
+
+  
   </body>
 </html>
+
