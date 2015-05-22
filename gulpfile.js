@@ -38,9 +38,10 @@ var paths = {
         css: version,
         js: version,
         pages: version + 'pages/',
-        components: {
+        guide: {
             css: version + 'guide/',
             root: version + 'guide/',
+            index: version + 'guide/index.html',
             atoms: version + 'guide/atoms.html',
             molecules: version + 'guide/molecules.html',
             organisms: version + 'guide/organisms.html'
@@ -54,8 +55,9 @@ var paths = {
             '!' + source + '_tags/*.js'
         ],
         styles: source + 'global/app.scss',
-        components: {
+        guide: {
             styles: source + '_guide/*.scss',
+            index: source + '_guide/index.html',
             html: source + '_guide/components.html'
         }
     },
@@ -202,84 +204,104 @@ gulp.task('build:html', ['clean:html'], function(){
 });
 
 gulp.task('clean:atoms', function(){
-    del.sync(paths.dist.components.atoms);
+    del.sync(paths.dist.guide.atoms);
 });
 
 gulp.task('build:atoms', ['clean:atoms'], function(){
     var components = getComponents('./source/atoms', 'atom');
 
-    return gulp.src(paths.source.components.html)
+    return gulp.src(paths.source.guide.html)
         .pipe(plumber())
         .pipe(data(function(){
             return {
+                id: 'atoms',
                 title: 'Atoms',
                 components: components
             };
         }))
         .pipe(swig(options.swig))
         .pipe(rename('atoms.html'))
-        .pipe(gulp.dest(paths.dist.components.root));
+        .pipe(gulp.dest(paths.dist.guide.root));
 });
 
 gulp.task('clean:molecules', function(){
-    del.sync(paths.dist.components.molecules);
+    del.sync(paths.dist.guide.molecules);
 });
 
 gulp.task('build:molecules', ['clean:molecules'], function(){
     var components = getComponents('./source/molecules', 'molecule');
 
-    return gulp.src(paths.source.components.html)
+    return gulp.src(paths.source.guide.html)
         .pipe(plumber())
         .pipe(data(function(){
             return {
+                id: 'molecules',
                 title: 'Molecules',
                 components: components
             };
         }))
         .pipe(swig(options.swig))
         .pipe(rename('molecules.html'))
-        .pipe(gulp.dest(paths.dist.components.root));
+        .pipe(gulp.dest(paths.dist.guide.root));
 });
 
 gulp.task('clean:organisms', function(){
-    del.sync(paths.dist.components.organisms);
+    del.sync(paths.dist.guide.organisms);
 });
 
 gulp.task('build:organisms', ['clean:organisms'], function(){
     var components = getComponents('./source/organisms', 'organism');
 
-    return gulp.src(paths.source.components.html)
+    return gulp.src(paths.source.guide.html)
         .pipe(plumber())
         .pipe(data(function(){
             return {
+                id: 'organisms',
                 title: 'Organisms',
                 components: components
             };
         }))
         .pipe(swig(options.swig))
         .pipe(rename('organisms.html'))
-        .pipe(gulp.dest(paths.dist.components.root));
+        .pipe(gulp.dest(paths.dist.guide.root));
 });
 
-gulp.task('clean:component-css', function(){
-    del.sync(paths.dist.components.css + '*.css');
+gulp.task('clean:guide-css', function(){
+    del.sync(paths.dist.guide.css + '*.css');
 });
 
-gulp.task('build:component-css', ['clean:component-css'], function(){
-    return gulp.src(paths.source.components.styles)
+gulp.task('build:guide-css', ['clean:guide-css'], function(){
+    return gulp.src(paths.source.guide.styles)
         .pipe(plumber())
         .pipe(glob(options.glob))
         .pipe(sass())
         .pipe(prefix(options.prefix))
         .pipe(rename('guide.css'))
-        .pipe(gulp.dest(paths.dist.components.css))
+        .pipe(gulp.dest(paths.dist.guide.css))
         .pipe(rename('guide.min.css'))
         .pipe(minify(options.minify))
-        .pipe(gulp.dest(paths.dist.components.css))
+        .pipe(gulp.dest(paths.dist.guide.css))
         .pipe(filter('**/*.css'));
 });
 
-gulp.task('build:components', ['build:atoms', 'build:molecules', 'build:organisms', 'build:component-css']);
+gulp.task('clean:guide-index', function(){
+    del.sync(paths.dist.guide.index);
+});
+
+gulp.task('build:guide-index', ['clean:guide-index'], function(){
+    return gulp.src(paths.source.guide.index)
+        .pipe(plumber())
+        .pipe(data(function(){
+            return {
+                id: 'home',
+                title: 'Home'
+            };
+        }))
+        .pipe(swig(options.swig))
+        .pipe(gulp.dest(paths.dist.guide.root));
+});
+
+gulp.task('build:guide', ['build:atoms', 'build:molecules', 'build:organisms', 'build:guide-css', 'build:guide-index']);
 
 gulp.task('clean:all', function(){
     del.sync(dist);
@@ -299,7 +321,7 @@ gulp.task('build:latest', ['clean:latest'], function(){
         .pipe(gulp.dest(dist));
 });
 
-gulp.task('build:all', ['build:css', 'build:js', 'build:html', 'build:latest', 'build:components']);
+gulp.task('build:all', ['build:css', 'build:js', 'build:html', 'build:latest', 'build:guide']);
 
 gulp.task('default', ['build:all']);
 
