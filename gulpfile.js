@@ -14,6 +14,7 @@ var amd = require('amd-optimize'),
     filter = require('gulp-filter'),
     jshint = require('gulp-jshint'),
     minify = require('gulp-minify-css'),
+    order = require('gulp-order'),
     plumber = require('gulp-plumber'),
     rename = require('gulp-rename'),
     sass = require('gulp-sass'),
@@ -22,6 +23,7 @@ var amd = require('amd-optimize'),
     uglify = require('gulp-uglify'),
     path = require('path'),
     stylish = require('jshint-stylish'),
+    html_beautify = require('./source/_filters/html-beautify.js'),
     atom = require('./source/_tags/atom.js'),
     molecule = require('./source/_tags/molecule.js'),
     organism = require('./source/_tags/organism.js'),
@@ -52,14 +54,18 @@ var paths = {
         pages: source + 'pages/**/*.html',
         scripts: [
             source + '**/*.js',
+            '!' + source + '_filters/*.js',
+            '!' + source + '_guide/*.js',
             '!' + source + '_tags/*.js'
         ],
         styles: source + 'global/app.scss',
         guide: {
-            styles: source + '_guide/*.scss',
+            styles: source + '_guide/style.scss',
             index: source + '_guide/index.html',
-            html: source + '_guide/components.html'
-        }
+            html: source + '_guide/components.html',
+            scripts: source + '_guide/*.js'
+        },
+        index: source + 'index/*.*'
     },
     watch: {
         pages: [
@@ -101,6 +107,7 @@ var options = {
                 cache: false
             });
 
+            swig.setFilter(html_beautify.name, html_beautify.filter);
             swig.setTag(atom.tag, atom.parse, atom.compile);
             swig.setTag(molecule.tag, molecule.parse, molecule.compile);
             swig.setTag(organism.tag, organism.parse, organism.compile);
@@ -140,9 +147,9 @@ var getComponents = function(componentDirectory, componentType){
             var component = require(filePath);
 
             components.push({
-                name:  component.name || component.file,
+                name:  component.name || files[i].replace('.json', ''),
                 description: component.description || '',
-                file: '../' + componentType + 's/' + component.file
+                file: '../' + componentType + 's/' + files[i].replace('json', 'html')
             });
         }
     }
@@ -182,6 +189,10 @@ gulp.task('build:js', ['clean:js'], function(){
         .pipe(jshint.reporter(stylish))
         .pipe(jshint.reporter('fail'))
         .pipe(amd('app', options.amd))
+        .pipe(order([
+            '**/require.js',
+            '**/*.js'
+        ]))
         .pipe(concat(project + '.js'))
         .pipe(gulp.dest(paths.dist.js))
         .pipe(sourcemaps.init())
@@ -284,6 +295,18 @@ gulp.task('build:guide-css', ['clean:guide-css'], function(){
         .pipe(filter('**/*.css'));
 });
 
+gulp.task('clean:guide-js', function(){
+    del.sync(paths.dist.guide.root + '*.js');
+});
+
+gulp.task('build:guide-js', ['clean:guide-js'], function(){
+    gulp.src(paths.source.guide.scripts)
+        .pipe(plumber())
+        .pipe(concat('guide.min.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest(paths.dist.guide.root));
+});
+
 gulp.task('clean:guide-index', function(){
     del.sync(paths.dist.guide.index);
 });
@@ -301,7 +324,7 @@ gulp.task('build:guide-index', ['clean:guide-index'], function(){
         .pipe(gulp.dest(paths.dist.guide.root));
 });
 
-gulp.task('build:guide', ['build:atoms', 'build:molecules', 'build:organisms', 'build:guide-css', 'build:guide-index']);
+gulp.task('build:guide', ['build:atoms', 'build:molecules', 'build:organisms', 'build:guide-css', 'build:guide-js', 'build:guide-index']);
 
 gulp.task('clean:all', function(){
     del.sync(dist);
@@ -321,14 +344,26 @@ gulp.task('build:latest', ['clean:latest'], function(){
         .pipe(gulp.dest(dist));
 });
 
-gulp.task('build:all', ['build:css', 'build:js', 'build:html', 'build:latest', 'build:guide']);
+gulp.task('clean:index', function(){
+    del.sync([dist + '*.*', '!' + paths.dist.latest], { nodir: true });
+});
+
+gulp.task('build:index', ['clean:index'], function(){
+    return gulp.src(paths.source.index)
+        .pipe(gulp.dest(dist));
+});
+
+gulp.task('build:all', ['build:css', 'build:js', 'build:html', 'build:latest', 'build:guide', 'build:index']);
 
 gulp.task('default', ['build:all']);
 
 gulp.task('watch', function(){
-    gulp.watch(paths.watch.pages, ['build:html']);
+    gulp.watch(paths.watch.pages, ['build:html', 'build:atoms', 'build:molecules', 'build:organisms', 'build:guide-index']);
     gulp.watch(paths.watch.scripts, ['build:js']);
     gulp.watch(paths.watch.styles, ['build:css']);
+    gulp.watch('./package.json', ['build:latest']);    
+    gulp.watch(paths.source.guide.styles, ['build:guide-css']);
+    gulp.watch(paths.source.index, ['build:index']);
 });
 
 gulp.task('dev', ['build:all', 'watch']);

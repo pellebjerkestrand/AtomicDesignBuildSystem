@@ -2,6 +2,8 @@
 	&-body {
 		background-color: #f0f0f0;
 		margin: 0;
+		
+		@import 'prism';
 	}
 	
 	&-navigation {
@@ -32,7 +34,7 @@
 	
 	&-components {
 		&-wrapper {
-			margin: 0 auto;
+			margin: 1em auto;
 			padding: 0 1em;
 		}
 		
@@ -51,11 +53,61 @@
 		background-position: 0 0, 15px 15px;
 		border: 1px solid #212121;
 		border-radius: 2px;
-		padding: 1em;
+		clear: both;
+		margin: .5em 0;
+		padding: 0;
+		
+		&:before,
+		&:after {
+			content: ' ';
+			display: table;
+		}
+		
+		&:after {
+			clear: both;
+		}
+		
+		&-wrapper {
+			margin: 1em 0;
+		}
 		
 		&-title,
 		&-description {
 			font-family: sans-serif;
+		}
+		
+		&-checkbox {
+			&-color:checked ~ .sg-component {			
+				background-image: none;
+			}
+			
+			&-padding:checked ~ .sg-component {			
+				padding: 1em;
+			}
+		
+			&-markup:checked ~ .sg-component-markup-wrapper {			
+				display: block;
+			}
+		}
+		
+		&-label {
+			margin-right: 1em;
+		}
+		
+		&-markup-wrapper {
+			display: none;
+			
+			pre {
+				border: 1px solid #212121;
+				border-radius: 2px;
+				max-height: 20em;	
+			}
+		}
+		
+		&-markup {
+			max-width: 100%;
+			min-width: 100%;
+			width: 100%;
 		}
 	}
 }
