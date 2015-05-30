@@ -86,7 +86,9 @@ Run `npm install` to get the dependencies.
 Run `gulp` to build.
 
 ## Automatic Build While Developing
-Run `gulp dev` and watchers will be set up for building HTML, CSS and JS when relevant files change.
+Run `gulp dev` and watchers will be set up for building HTML, CSS and JS when relevant files change. Watchers for building the style guide will also be set up.
+
+New files do not trigger anything. After adding new files, you must rerun `gulp dev`.
 
 ## Deployment & Hosting
 `.deployment` and `deploy.sh` take care of building and deploying to an Azure Website, so hosting in one of those is easy as pie. Just link the GitHub repository to the Azure Website and it will auto build and deploy on each commit. Linking repositories that are hosted elsewhere is also easy but might result in you having to set up web hooks manually.
@@ -99,9 +101,19 @@ This repo's `develop` branch currently builds and deploys on [adbs-dev.azurewebs
 
 [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://azuredeploy.net/?repository=https://github.com/pellebjerkestrand/AtomicDesignBuildSystem)
 
-## In Progress
-- Style guide site generation
+## Auto Generated Style Guide Site
+An auto generated style guide site can be found in `./dist/[version]/guide/` after running `gulp build` or `gulp build:guide`.
+
+The guide shows all atoms, molecules and organisms that have an associated JSON file.
+
+The JSON file must be in the same directory as the component and have the same file name.
+
+```
+{
+    "name": "Component Name" // Optional
+    "description": "Component Description" // Optional
+}
+```
 
 ## TODO (maybe)
 - Support for auto discovery and running of tests
-- Handle watching of new files (properly)
