@@ -7,21 +7,20 @@
     <link rel="stylesheet" href="../atomicdesignbuildsystem.min.css" />
 </head>
 <body class="sg-body">
-    <nav class="sg-navigation">
-        <a href="atoms.html" class="sg-navigation-link">Atoms</a>
-        <a href="molecules.html" class="sg-navigation-link">Molecules</a>
-        <a href="organisms.html" class="sg-navigation-link">Organisms</a>
-    </nav>
+    {% block navigation %}
+        {% include "navigation.html" %}
+    {% endblock %}
     <div class="sg-components-wrapper">
         <header class="sg-components-header">
-        {% block header %}
-        {% endblock %}
+            {% block header %}
+                <h1 class="sg-components-title">{{ title }}</h1>
+            {% endblock %}
         </header>
-    
-        <div class="sg-components">
-        {% block components %}
+        
+        {% block content %}
         {% endblock %}
-        </div>
     </div>
+    <script src="guide.min.js"></script>
+    <script src="../atomicdesignbuildsystem.min.js"></script>
 </body>
 </html>

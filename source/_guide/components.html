@@ -1,14 +1,19 @@
-{% extends "framework.html" %}
-
-{% block header %}
-    <h1 class="sg-components-title">{{ title }}</h1>
-{% endblock %}
+{% extends "components-framework.html" %}
 
 {% block components %}
     {% for component in components %}
         <div class="sg-component-wrapper">
             <h2 class="sg-component-title">{{ component.name }}</h2>
             <p class="sg-component-description">{{ component.description }}</p>
+            <input type="checkbox" class="sg-component-checkbox sg-component-checkbox-color" id="color-{{ component.file }}" />
+            <label class="sg-component-label" for="color-{{ component.file }}">Background</label>
+            <input type="checkbox" class="sg-component-checkbox sg-component-checkbox-padding" id="padding-{{ component.file }}" />
+            <label class="sg-component-label" for="padding-{{ component.file }}">Padding</label>
+            <input type="checkbox" class="sg-component-checkbox sg-component-checkbox-markup" id="markup-{{ component.file }}" />
+            <label class="sg-component-label" for="markup-{{ component.file }}">Markup</label>
+            <div class="sg-component-markup-wrapper">
+                <pre><code class="sg-component-markup language-markup">{% filter escape %}{% filter html_beautify %}{% filter safe %}{% include component.file %}{% endfilter %}{% endfilter %}{% endfilter %}</code></pre>
+            </div>
             <div class="sg-component">
                 {% include component.file %}
             </div>

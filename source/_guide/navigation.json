@@ -1,0 +1,21 @@
+{
+	"menu": [
+		{
+			"id": "home",
+			"name": "Home",
+			"url": "index.html"
+		},{
+			"id": "atoms",
+			"name": "Atoms",
+			"url": "atoms.html"
+		},{
+			"id": "molecules",
+			"name": "Molecules",
+			"url": "molecules.html"
+		},{
+			"id": "organisms",
+			"name": "Organisms",
+			"url": "organisms.html"
+		}
+	]
+}
