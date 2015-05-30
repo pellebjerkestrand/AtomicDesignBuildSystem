@@ -123,7 +123,9 @@ Run <code>gulp</code> to build.</p>
 <h2>
 <a id="automatic-build-while-developing" class="anchor" href="#automatic-build-while-developing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Automatic Build While Developing</h2>
 
-<p>Run <code>gulp dev</code> and watchers will be set up for building HTML, CSS and JS when relevant files change.</p>
+<p>Run <code>gulp dev</code> and watchers will be set up for building HTML, CSS and JS when relevant files change. Watchers for building the style guide will also be set up.</p>
+
+<p>New files do not trigger anything. After adding new files, you must rerun <code>gulp dev</code>.</p>
 
 <h2>
 <a id="deployment--hosting" class="anchor" href="#deployment--hosting" aria-hidden="true"><span class="octicon octicon-link"></span></a>Deployment &amp; Hosting</h2>
@@ -139,18 +141,25 @@ Run <code>gulp</code> to build.</p>
 <p><a href="https://azuredeploy.net/?repository=https://github.com/pellebjerkestrand/AtomicDesignBuildSystem"><img src="http://azuredeploy.net/deploybutton.png" alt="Deploy to Azure"></a></p>
 
 <h2>
-<a id="in-progress" class="anchor" href="#in-progress" aria-hidden="true"><span class="octicon octicon-link"></span></a>In Progress</h2>
+<a id="auto-generated-style-guide-site" class="anchor" href="#auto-generated-style-guide-site" aria-hidden="true"><span class="octicon octicon-link"></span></a>Auto Generated Style Guide Site</h2>
 
-<ul>
-<li>Style guide site generation</li>
-</ul>
+<p>An auto generated style guide site can be found in <code>./dist/[version]/guide/</code> after running <code>gulp build</code> or <code>gulp build:guide</code>.</p>
+
+<p>The guide shows all atoms, molecules and organisms that have an associated JSON file.</p>
+
+<p>The JSON file must be in the same directory as the component and have the same file name.</p>
+
+<pre><code>{
+    "name": "Component Name" // Optional
+    "description": "Component Description" // Optional
+}
+</code></pre>
 
 <h2>
 <a id="todo-maybe" class="anchor" href="#todo-maybe" aria-hidden="true"><span class="octicon octicon-link"></span></a>TODO (maybe)</h2>
 
 <ul>
 <li>Support for auto discovery and running of tests</li>
-<li>Handle watching of new files (properly)</li>
 </ul>
 
       <footer class="site-footer">
