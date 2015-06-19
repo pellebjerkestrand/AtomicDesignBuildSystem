@@ -2,4 +2,9 @@
   background: purple;
   border: 0;
   color: white;
+  
+  &--variant {
+      background: yellow;
+      color: black;
+  }
 }

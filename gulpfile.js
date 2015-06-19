@@ -40,6 +40,7 @@ var paths = {
         css: version,
         js: version,
         pages: version + 'pages/',
+        images: version + 'images/',
         guide: {
             css: version + 'guide/',
             root: version + 'guide/',
@@ -59,6 +60,7 @@ var paths = {
             '!' + source + '_tags/*.js'
         ],
         styles: source + 'global/app.scss',
+        images: source + 'images/**/*.*',
         guide: {
             styles: source + '_guide/style.scss',
             index: source + '_guide/index.html',
@@ -91,7 +93,9 @@ var options = {
             organisms: 'organisms',
             require: '../node_modules/requirejs/require',
             text: '../node_modules/requirejs-text/text',
-            ko: '../node_modules/knockout/build/output/knockout-latest.debug'
+            ko: '../node_modules/knockout/build/output/knockout-latest',
+            components: 'components',
+            modules: 'modules'
         }
     },
     prefix: {
@@ -149,7 +153,8 @@ var getComponents = function(componentDirectory, componentType){
             components.push({
                 name:  component.name || files[i].replace('.json', ''),
                 description: component.description || '',
-                file: '../' + componentType + 's/' + files[i].replace('json', 'html')
+                file: '../' + componentType + 's/' + files[i].replace('json', 'html'),
+                variations: component.variations || []
             });
         }
     }
@@ -212,6 +217,16 @@ gulp.task('build:html', ['clean:html'], function(){
         .pipe(data(getJson))
         .pipe(swig(options.swig))
         .pipe(gulp.dest(paths.dist.pages));
+});
+
+gulp.task('clean:images', function(){
+    del.sync(paths.dist.images);
+});
+
+gulp.task('build:images', ['clean:images'], function(){
+    return gulp.src(paths.source.images)
+        .pipe(plumber())
+        .pipe(gulp.dest(paths.dist.images));
 });
 
 gulp.task('clean:atoms', function(){
@@ -317,7 +332,10 @@ gulp.task('build:guide-index', ['clean:guide-index'], function(){
         .pipe(data(function(){
             return {
                 id: 'home',
-                title: 'Home'
+                title: 'Home',
+                version: meta.version,
+                css: '../' + project + '.min.css',
+                js: '../' + project + '.min.js'
             };
         }))
         .pipe(swig(options.swig))
@@ -353,7 +371,7 @@ gulp.task('build:index', ['clean:index'], function(){
         .pipe(gulp.dest(dist));
 });
 
-gulp.task('build:all', ['build:css', 'build:js', 'build:html', 'build:latest', 'build:guide', 'build:index']);
+gulp.task('build:all', ['build:css', 'build:js', 'build:html', 'build:images', 'build:latest', 'build:guide', 'build:index']);
 
 gulp.task('default', ['build:all']);
 

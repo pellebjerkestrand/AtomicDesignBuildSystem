@@ -5,4 +5,17 @@
 {% endblock %}
 
 {% block content %}
+	{% if version %}
+		<h3 class="sg-components-sub-title">{{ version }}</h3>
+	{% endif %}
+	{% if css %}
+		<div>
+			<a href="{{ css }}">CSS</a>
+		</div>
+	{% endif %}
+	{% if js %}
+		<div>
+			<a href="{{ js }}">JS</a>
+		</div>
+	{% endif %}
 {% endblock %}

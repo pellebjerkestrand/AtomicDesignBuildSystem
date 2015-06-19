@@ -115,5 +115,36 @@ The JSON file must be in the same directory as the component and have the same f
 }
 ```
 
+### Component Variations
+Instead of making several components to display variations it's possible to make one component and describe variations in the component's JSON file.
+
+The component will be rendered once for each variation and `data` will be passed to the component when rendering.
+
+The following combination will render the `Button` component twice: once with `{ "type": "standard" }` and another with `{ "type": "variant" }`.
+
+```
+{
+    "name": "Button",
+    "description": "A standard button",
+    "variations": [
+        {
+            "name": "Standard",
+            "data": {
+                "type": "standard"
+            }
+        },{
+            "name": "Variant",
+            "data": {
+                "type": "variant"
+            }
+        }
+    ]
+}
+```
+
+```
+<button type="button" class="button button--{{ type | default("standard") }}">Button</button>
+```
+
 ## TODO (maybe)
 - Support for auto discovery and running of tests
