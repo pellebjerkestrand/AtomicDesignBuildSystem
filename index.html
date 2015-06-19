@@ -153,12 +153,36 @@ Run <code>gulp</code> to build.</p>
 }
 </code></pre>
 
-<h2>
-<a id="todo-maybe" class="anchor" href="#todo-maybe" aria-hidden="true"><span class="octicon octicon-link"></span></a>TODO (maybe)</h2>
+<h3>
+<a id="component-variations" class="anchor" href="#component-variations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Component Variations</h3>
 
-<ul>
-<li>Support for auto discovery and running of tests</li>
-</ul>
+<p>Instead of making several components to display variations it's possible to make one component and describe variations in the component's JSON file.</p>
+
+<p>The component will be rendered once for each variation and <code>data</code> will be passed to the component when rendering.</p>
+
+<p>The following combination will render the <code>Button</code> component twice: once with <code>{ "type": "standard" }</code> and another with <code>{ "type": "variant" }</code>.</p>
+
+<pre><code>{
+    "name": "Button",
+    "description": "A standard button",
+    "variations": [
+        {
+            "name": "Standard",
+            "data": {
+                "type": "standard"
+            }
+        },{
+            "name": "Variant",
+            "data": {
+                "type": "variant"
+            }
+        }
+    ]
+}
+</code></pre>
+
+<pre><code>&lt;button type="button" class="button button--{{ type | default("standard") }}"&gt;Button&lt;/button&gt;
+</code></pre>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/pellebjerkestrand/AtomicDesignBuildSystem">Atomic Design Build System</a> is maintained by <a href="https://github.com/pellebjerkestrand">pellebjerkestrand</a>.</span>
