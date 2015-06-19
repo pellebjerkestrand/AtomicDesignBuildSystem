@@ -1,6 +1,6 @@
 {
   "name": "AtomicDesignBuildSystem",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A Gulp based build system using Atomic Design and SemVer",
   "keywords": [
     "Atomic Design",

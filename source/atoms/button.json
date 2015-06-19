@@ -1,5 +1,17 @@
 {
-  "name": "Button",
-  "description": "A standard button",
-  "file": "button.html"
+    "name": "Button",
+    "description": "A standard button",
+    "variations": [
+        {
+            "name": "Standard",
+            "data": {
+                "type": "standard"
+            }
+        },{
+            "name": "Variant",
+            "data": {
+                "type": "variant"
+            }
+        }
+    ]
 }

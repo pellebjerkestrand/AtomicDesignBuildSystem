@@ -51,10 +51,10 @@
 			linear-gradient(45deg, #cbcbcb 25%, transparent 25%, transparent 75%, #cbcbcb 75%, #cbcbcb);
 		background-size: 30px 30px;
 		background-position: 0 0, 15px 15px;
-		border: 1px solid #212121;
-		border-radius: 2px;
+		border-bottom: 1px solid #212121;
+		border-top: 1px solid #212121;
 		clear: both;
-		margin: .5em 0;
+		margin: .5em -1em;
 		padding: 0;
 		
 		&:before,
@@ -68,7 +68,11 @@
 		}
 		
 		&-wrapper {
-			margin: 1em 0;
+			margin: 4em 0 2em 0;
+			
+			&:first-child {
+				margin-top: 2em;
+			}
 		}
 		
 		&-title,
@@ -88,13 +92,18 @@
 			&-markup:checked ~ .sg-component-markup-wrapper {			
 				display: block;
 			}
+		
+			&-template:checked ~ .sg-component-template-wrapper {			
+				display: block;
+			}
 		}
 		
 		&-label {
 			margin-right: 1em;
 		}
 		
-		&-markup-wrapper {
+		&-markup-wrapper,
+		&-template-wrapper {
 			display: none;
 			
 			pre {
@@ -104,7 +113,8 @@
 			}
 		}
 		
-		&-markup {
+		&-markup,
+		&-template {
 			max-width: 100%;
 			min-width: 100%;
 			width: 100%;
