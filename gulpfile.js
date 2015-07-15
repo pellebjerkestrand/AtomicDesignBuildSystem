@@ -7,6 +7,7 @@ var amd = require('amd-optimize'),
     fs = require('fs'),
     gulp = require('gulp'),
     prefix = require('gulp-autoprefixer'),
+    batch = require('gulp-batch'),
     concat = require('gulp-concat'),
     file = require('gulp-file'),
     glob = require('gulp-css-globbing'),
@@ -21,6 +22,7 @@ var amd = require('amd-optimize'),
     sourcemaps = require('gulp-sourcemaps'),
     swig = require('gulp-swig'),
     uglify = require('gulp-uglify'),
+    watch = require('gulp-watch'),
     path = require('path'),
     stylish = require('jshint-stylish'),
     html_beautify = require('./source/_filters/html-beautify.js'),
@@ -39,7 +41,6 @@ var paths = {
         latest: dist + latest,
         css: version,
         js: version,
-        pages: version + 'pages/',
         images: version + 'images/',
         guide: {
             css: version + 'guide/',
@@ -47,11 +48,13 @@ var paths = {
             index: version + 'guide/index.html',
             atoms: version + 'guide/atoms.html',
             molecules: version + 'guide/molecules.html',
-            organisms: version + 'guide/organisms.html'
-        }
+            organisms: version + 'guide/organisms.html',
+            pages: version + 'guide/pages.html',
+            images: version + 'guide/images/'
+        },
+        source: version + 'source/'
     },
     source: {
-        data: source + 'data/',
         pages: source + 'pages/**/*.html',
         scripts: [
             source + '**/*.js',
@@ -60,12 +63,18 @@ var paths = {
             '!' + source + '_tags/*.js'
         ],
         styles: source + 'global/app.scss',
+        sass: [
+            source + '**/*.scss',
+            '!' + source + '_guide/*.scss'
+        ],
         images: source + 'images/**/*.*',
         guide: {
             styles: source + '_guide/style.scss',
             index: source + '_guide/index.html',
             html: source + '_guide/components.html',
-            scripts: source + '_guide/*.js'
+            pages: source + '_guide/pages.html',
+            scripts: source + '_guide/*.js',
+            images: source + '_guide/images/**/*.*'
         },
         index: source + 'index/*.*'
     },
@@ -73,7 +82,7 @@ var paths = {
         pages: [
             source + '**/*.html',
             '!' + source + '**/*.tmpl.html',
-            source + 'data/**/*.json'
+            source + 'pages/**/*.json'
         ],
         scripts: [
             source + '**/*.js',
@@ -122,13 +131,19 @@ var options = {
         keepSpecialComments: 0
     },
     sourcemaps: {
-        includeContent: false,
-        sourceRoot: './'
+        js: {
+            includeContent: false,
+            sourceRoot: ''
+        },
+        css: {
+            includeContent: false,
+            sourceRoot: 'source'
+        }
     }
 };
 
 var getJson = function(file){
-    var dataFile = paths.source.data + path.basename(file.path, '.html') + '.json';
+    var dataFile = file.path.replace('.html', '.json');
 
     if(fs.existsSync(dataFile)){
         return require(dataFile);
@@ -153,6 +168,7 @@ var getComponents = function(componentDirectory, componentType){
             components.push({
                 name:  component.name || files[i].replace('.json', ''),
                 description: component.description || '',
+                file_name: files[i].replace('json', 'html'),
                 file: '../' + componentType + 's/' + files[i].replace('json', 'html'),
                 variations: component.variations || []
             });
@@ -163,7 +179,10 @@ var getComponents = function(componentDirectory, componentType){
 };
 
 gulp.task('clean:css', function(){
-    del.sync(paths.dist.css + '*.css');
+    del.sync([
+        paths.dist.css + '*.css',
+        paths.dist.css + '*.css.map'
+    ]);
 });
 
 gulp.task('build:css', ['clean:css'], function(){
@@ -205,18 +224,6 @@ gulp.task('build:js', ['clean:js'], function(){
         .pipe(rename({suffix:'.min'}))
         .pipe(sourcemaps.write('./', options.sourcemaps))
         .pipe(gulp.dest(paths.dist.js));
-});
-
-gulp.task('clean:html', function(){
-    del.sync(paths.dist.pages);
-});
-
-gulp.task('build:html', ['clean:html'], function(){
-    return gulp.src(paths.source.pages)
-        .pipe(plumber())
-        .pipe(data(getJson))
-        .pipe(swig(options.swig))
-        .pipe(gulp.dest(paths.dist.pages));
 });
 
 gulp.task('clean:images', function(){
@@ -292,6 +299,56 @@ gulp.task('build:organisms', ['clean:organisms'], function(){
         .pipe(gulp.dest(paths.dist.guide.root));
 });
 
+gulp.task('clean:pages-overview', function(){
+    del.sync(paths.dist.guide.pages);
+});
+
+gulp.task('build:pages-overview', ['clean:pages-overview'], function(){
+    var pages = getComponents('./source/pages', 'page');
+    
+    return gulp.src(paths.source.guide.pages)
+        .pipe(plumber())
+        .pipe(data(function(){
+            return {
+                id: 'pages',
+                title: 'Pages',
+                pages: pages
+            };
+        }))
+        .pipe(swig(options.swig))
+        .pipe(rename('pages.html'))
+        .pipe(gulp.dest(paths.dist.guide.root));
+});
+
+gulp.task('clean:pages', function(){
+    del.sync([
+            paths.dist.guide.root + '*.html',
+            '!' + paths.dist.guide.index,
+            '!' + paths.dist.guide.atoms,
+            '!' + paths.dist.guide.molecules,
+            '!' + paths.dist.guide.organisms,
+            '!' + paths.dist.guide.pages
+        ]);
+});
+
+gulp.task('build:pages', ['clean:pages'], function(){    
+    return gulp.src(paths.source.pages)
+        .pipe(plumber())
+        .pipe(data(getJson))
+        .pipe(swig(options.swig))
+        .pipe(gulp.dest(paths.dist.guide.root));
+});
+
+gulp.task('clean:guide-images', function(){
+    del.sync(paths.dist.guide.images);
+});
+
+gulp.task('build:guide-images', ['clean:guide-images'], function(){
+    return gulp.src(paths.source.guide.images)
+        .pipe(plumber())
+        .pipe(gulp.dest(paths.dist.guide.images));
+});
+
 gulp.task('clean:guide-css', function(){
     del.sync(paths.dist.guide.css + '*.css');
 });
@@ -342,7 +399,7 @@ gulp.task('build:guide-index', ['clean:guide-index'], function(){
         .pipe(gulp.dest(paths.dist.guide.root));
 });
 
-gulp.task('build:guide', ['build:atoms', 'build:molecules', 'build:organisms', 'build:guide-css', 'build:guide-js', 'build:guide-index']);
+gulp.task('build:guide', ['build:atoms', 'build:molecules', 'build:organisms', 'build:pages', 'build:pages-overview', 'build:guide-images', 'build:guide-css', 'build:guide-js', 'build:guide-index']);
 
 gulp.task('clean:all', function(){
     del.sync(dist);
@@ -371,17 +428,34 @@ gulp.task('build:index', ['clean:index'], function(){
         .pipe(gulp.dest(dist));
 });
 
-gulp.task('build:all', ['build:css', 'build:js', 'build:html', 'build:images', 'build:latest', 'build:guide', 'build:index']);
+gulp.task('build:all', ['build:css', 'build:js', 'build:images', 'build:latest', 'build:guide', 'build:index']);
 
 gulp.task('default', ['build:all']);
 
 gulp.task('watch', function(){
-    gulp.watch(paths.watch.pages, ['build:html', 'build:atoms', 'build:molecules', 'build:organisms', 'build:guide-index']);
-    gulp.watch(paths.watch.scripts, ['build:js']);
-    gulp.watch(paths.watch.styles, ['build:css']);
-    gulp.watch('./package.json', ['build:latest']);    
-    gulp.watch(paths.source.guide.styles, ['build:guide-css']);
-    gulp.watch(paths.source.index, ['build:index']);
+    watch(paths.watch.pages, batch(function(events, done){
+        gulp.start(['build:pages', 'build:atoms', 'build:molecules', 'build:organisms', 'build:guide-index'], done);
+    }));
+    
+    watch(paths.watch.scripts, batch(function(events, done){
+        gulp.start('build:js', done);
+    }));
+    
+    watch(paths.watch.styles, batch(function(events, done){
+        gulp.start('build:css', done);
+    }));
+    
+    watch('./package.json', batch(function(events, done){
+        gulp.start('build:latest', done);
+    }));
+    
+    watch(paths.source.guide.styles, batch(function(events, done){
+        gulp.start('build:guide-css', done);
+    }));
+    
+    watch(paths.source.index, batch(function(events, done){
+        gulp.start('build:index', done);
+    }));
 });
 
 gulp.task('dev', ['build:all', 'watch']);

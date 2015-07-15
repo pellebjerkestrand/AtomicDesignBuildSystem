@@ -68,7 +68,7 @@
 		}
 		
 		&-wrapper {
-			margin: 4em 0 2em 0;
+			margin: 2em 0 2em 0;
 			
 			&:first-child {
 				margin-top: 2em;
@@ -80,10 +80,69 @@
 			font-family: sans-serif;
 		}
 		
-		&-checkbox {
-			&-color:checked ~ .sg-component {			
-				background-image: none;
+		&-title {
+			padding-right: 1.5em;
+			position: relative;
+		}
+		
+		&-trigger {
+			cursor: pointer;
+			display: block;
+			position: relative;
+			width: 100%;
+			
+			&:before,
+			&:after {
+				background: #212121;
+				content: ' ';
+				display: block;
+				position: absolute;
 			}
+			
+			&:before {
+				height: 1em;
+				margin-right: -.125em;
+				right: .5em;
+				top: 0;
+				transition: transform .25s;
+				width: .25em;
+			}
+			
+			&:after {
+				height: .25em;
+				margin-top: -.125em;
+				right: 0;
+				top: .5em;;
+				width: 1em;
+			}
+		}
+		
+		&-toggler {
+			display: none;
+			
+			&:checked {
+				~ .sg-component-trigger {
+					&:before {
+						transform: rotate(90deg);
+					}
+				}
+				
+				~ .sg-component-content {
+					display: block;
+				}
+			}
+		}
+		
+		&-content {
+			display: none;
+		}
+		
+		&-controls-spacer {
+			margin: .25em 0;
+		}
+		
+		&-checkbox {
+			cursor: pointer;
 			
 			&-padding:checked ~ .sg-component {			
 				padding: 1em;
@@ -98,7 +157,22 @@
 			}
 		}
 		
+		&-radio {
+			cursor: pointer;
+			
+			&-bg-light:checked ~ .sg-component {
+				background-color: #fefefe;
+				background-image: none;
+			}	
+			
+			&-bg-dark:checked ~ .sg-component {
+				background-color: #212121;			
+				background-image: none;
+			}	
+		}
+		
 		&-label {
+			cursor: pointer;
 			margin-right: 1em;
 		}
 		

@@ -1,0 +1,40 @@
+{% if component %}
+	{% set index = index | default(0) %}
+    {% if variation %}
+    	<h3 class="sg-component-title">{{ variation.name | default(index) }}</h3>
+        {% if variation.description %}
+            <p class="sg-component-description">{{ variation.description }}</p>
+        {% endif %}
+    {% endif %}
+    <div>
+        <span>Background:&nbsp;</span>
+        <input type="radio" class="sg-component-radio sg-component-radio-bg-none" id="bg-none-{{ component.file }}-v-{{ index }}" name="bg-{{ component.file }}-v-{{ index }}" checked />
+        <label class="sg-component-label" for="bg-none-{{ component.file }}-v-{{ index }}">None</label>
+        <input type="radio" class="sg-component-radio sg-component-radio-bg-light" id="bg-light-{{ component.file }}-v-{{ index }}" name="bg-{{ component.file }}-v-{{ index }}" />
+        <label class="sg-component-label" for="bg-light-{{ component.file }}-v-{{ index }}">Light</label>
+        <input type="radio" class="sg-component-radio sg-component-radio-bg-dark" id="bg-dark-{{ component.file }}-v-{{ index }}" name="bg-{{ component.file }}-v-{{ index }}" />
+        <label class="sg-component-label" for="bg-dark-{{ component.file }}-v-{{ index }}">Dark</label>
+        <div class="sg-component-controls-spacer"></div>
+        <input type="checkbox" class="sg-component-checkbox sg-component-checkbox-padding" id="padding-{{ component.file }}-v-{{ index }}" />
+        <label class="sg-component-label" for="padding-{{ component.file }}-v-{{ index }}">Padding</label>
+        <input type="checkbox" class="sg-component-checkbox sg-component-checkbox-markup" id="markup-{{ component.file }}-v-{{ index }}" />
+        <label class="sg-component-label" for="markup-{{ component.file }}-v-{{ index }}">Markup</label>
+        <!--
+        <input type="checkbox" class="sg-component-checkbox sg-component-checkbox-template" id="template-{{ component.file }}-v-{{ index }}" />
+        <label class="sg-component-label" for="template-{{ component.file }}-v-{{ index }}">Template</label>
+        -->
+        <div class="sg-component-markup-wrapper">
+            <h3 class="sg-component-title">Markup</h3>
+            <pre><code class="sg-component-markup language-markup">{% filter escape %}{% filter html_beautify %}{% filter safe %}{% spaceless %}{% include component.file with variation.data only %}{% endspaceless %}{% endfilter %}{% endfilter %}{% endfilter %}</code></pre>
+        </div>
+        <!--
+        <div class="sg-component-template-wrapper">
+            <h3 class="sg-component-title">Template</h3>
+            <pre><code class="sg-component-template language-markup">{% raw %}[TODO] {% filter escape %}{% include_raw component.file %}{% endfilter %}{% endraw %}</code></pre>
+        </div>
+        -->
+        <div class="sg-component">
+            {% include component.file with variation.data only %}
+        </div>
+    </div>
+{% endif %}

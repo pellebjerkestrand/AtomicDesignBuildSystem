@@ -3,48 +3,25 @@
 {% block components %}
     {% for component in components %}
         <div class="sg-component-wrapper">
-            <h2 class="sg-component-title">{{ component.name }}</h2>
-            <p class="sg-component-description">{{ component.description }}</p>
-            {% if component.variations.length == 0 %}
-                <input type="checkbox" class="sg-component-checkbox sg-component-checkbox-color" id="color-{{ component.file }}" />
-                <label class="sg-component-label" for="color-{{ component.file }}">Background</label>
-                <input type="checkbox" class="sg-component-checkbox sg-component-checkbox-padding" id="padding-{{ component.file }}" />
-                <label class="sg-component-label" for="padding-{{ component.file }}">Padding</label>
-                <input type="checkbox" class="sg-component-checkbox sg-component-checkbox-markup" id="markup-{{ component.file }}" />
-                <label class="sg-component-label" for="markup-{{ component.file }}">Markup</label>
-                <div class="sg-component-markup-wrapper">
-                    <h3 class="sg-component-title">Markup</h3>
-                    <pre><code class="sg-component-markup language-markup">{% filter escape %}{% filter html_beautify %}{% filter safe %}{% spaceless %}{% include component.file %}{% endspaceless %}{% endfilter %}{% endfilter %}{% endfilter %}</code></pre>
-                </div>
-                <div class="sg-component">
-                    {% include component.file %}
-                </div>
-            {% endif %}
-            {% if component.variations %}
-                <div class="sg-component-variations">
-                    {% for variation in component.variations %}
-                        <h3 class="sg-component-title">{{ variation.name | default(loop.index) }}</h3>
-                        {% if variation.description %}
-                        <p class="sg-component-description">{{ variation.description }}</p>
-                        {% endif %}
-                        <div>
-                            <input type="checkbox" class="sg-component-checkbox sg-component-checkbox-color" id="color-{{ component.file }}-variation-{{ loop.index }}" />
-                            <label class="sg-component-label" for="color-{{ component.file }}-variation-{{ loop.index }}">Background</label>
-                            <input type="checkbox" class="sg-component-checkbox sg-component-checkbox-padding" id="padding-{{ component.file }}-variation-{{ loop.index }}" />
-                            <label class="sg-component-label" for="padding-{{ component.file }}-variation-{{ loop.index }}">Padding</label>
-                            <input type="checkbox" class="sg-component-checkbox sg-component-checkbox-markup" id="markup-{{ component.file }}-variation-{{ loop.index }}" />
-                            <label class="sg-component-label" for="markup-{{ component.file }}-variation-{{ loop.index }}">Markup</label>
-                            <div class="sg-component-markup-wrapper">
-                                <h3 class="sg-component-title">Markup</h3>
-                                <pre><code class="sg-component-markup language-markup">{% filter escape %}{% filter html_beautify %}{% filter safe %}{% spaceless %}{% include component.file with variation.data %}{% endspaceless %}{% endfilter %}{% endfilter %}{% endfilter %}</code></pre>
-                            </div>
-                            <div class="sg-component">
-                                {% include component.file with variation.data %}
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
+            <input type="checkbox" checked class="sg-component-toggler" id="toggle-{{ component.name }}" />
+            <label class="sg-component-trigger" for="toggle-{{ component.name }}">
+                <h2 class="sg-component-title">{{ component.name }}</h2>
+            </label>
+            <div class="sg-component-content">
+                {% if component.description %}
+                    <p class="sg-component-description">{{ component.description }}</p>
+                {% endif %}
+                {% if component.variations.length == 0 %}
+                    {% include "component.html" with { component: component } only %}
+                {% endif %}
+                {% if component.variations %}
+                    <div class="sg-component-variations">
+                        {% for variation in component.variations %}
+                            {% include "component.html" with { component: component, variation: variation, index: loop.index } only %}                        
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
         </div>
     {% endfor %}
 {% endblock %}

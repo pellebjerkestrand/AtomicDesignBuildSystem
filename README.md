@@ -21,11 +21,6 @@ Template: `{% template "article" %}`
 
 These are all variations of the Swig `include` tag and support the same things it does.
 
-### Pages and Data
-In Atomic Design, a page is an instance of a template with some data.
-
-A JSON file in `./source/data/` with the same name as an HTML file in `./source/pages/` is passed to the page during the build process.
-
 ## Styles (SCSS)
 Just add your SCSS files to the appropriate directory (atoms, molecules etc.) and the build process will take care of finding them and including them in the SASS build.
 
@@ -86,9 +81,9 @@ Run `npm install` to get the dependencies.
 Run `gulp` to build.
 
 ## Automatic Build While Developing
-Run `gulp dev` and watchers will be set up for building HTML, CSS and JS when relevant files change. Watchers for building the style guide will also be set up.
+Run `gulp watch` to set up watchers for building HTML, CSS and JS when relevant files change or are added. Watchers for building the style guide will also be set up.
 
-New files do not trigger anything. After adding new files, you must rerun `gulp dev`.
+Run `gulp dev` to build and then watch.
 
 ## Deployment & Hosting
 `.deployment` and `deploy.sh` take care of building and deploying to an Azure Website, so hosting in one of those is easy as pie. Just link the GitHub repository to the Azure Website and it will auto build and deploy on each commit. Linking repositories that are hosted elsewhere is also easy but might result in you having to set up web hooks manually.
@@ -104,7 +99,7 @@ This repo's `develop` branch currently builds and deploys on [adbs-dev.azurewebs
 ## Auto Generated Style Guide Site
 An auto generated style guide site can be found in `./dist/[version]/guide/` after running `gulp build` or `gulp build:guide`.
 
-The guide shows all atoms, molecules and organisms that have an associated JSON file.
+The guide shows all atoms, molecules, organisms and pages that have an associated JSON file.
 
 The JSON file must be in the same directory as the component and have the same file name.
 

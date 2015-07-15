@@ -1,0 +1,12 @@
+{% extends "components-framework.html" %}
+
+{% block components %}
+    {% for page in pages %}
+        <div class="sg-component-wrapper">
+            <h2 class="sg-component-title">
+                <a href="{{ page.file_name }}" class="sg-component-link">{{ page.name }}</a>
+            </h2>
+            <p class="sg-component-description">{{ page.description }}</p>
+        </div>
+    {% endfor %}
+{% endblock %}

@@ -1,6 +1,6 @@
 {
   "name": "AtomicDesignBuildSystem",
-  "version": "1.3.0-beta",
+  "version": "2.0.0-beta",
   "description": "A Gulp based build system using Atomic Design and SemVer",
   "keywords": [
     "Atomic Design",
@@ -20,22 +20,24 @@
     "del": "1.2.0",
     "gulp": "3.9.0",
     "gulp-autoprefixer": "2.3.1",
-    "gulp-concat": "2.5.2",
+    "gulp-batch": "1.0.5",
+    "gulp-concat": "2.6.0",
     "gulp-css-globbing": "0.1.8",
     "gulp-data": "1.2.0",
     "gulp-file": "0.2.0",
     "gulp-filter": "2.0.2",
-    "gulp-jshint": "1.11.0",
-    "gulp-minify-css": "1.1.6",
+    "gulp-jshint": "1.11.2",
+    "gulp-minify-css": "1.2.0",
     "gulp-order": "1.1.1",
     "gulp-plumber": "1.0.1",
     "gulp-rename": "1.2.2",
-    "gulp-sass": "2.0.1",
+    "gulp-sass": "2.0.3",
     "gulp-sourcemaps": "1.5.2",
     "gulp-swig": "0.7.4",
     "gulp-uglify": "1.2.0",
-    "js-beautify": "1.5.6",
-    "jshint-stylish": "2.0.0"
+    "gulp-watch": "4.2.4",
+    "js-beautify": "1.5.10",
+    "jshint-stylish": "2.0.1"
   },
   "dependencies": {
     "knockout": "3.3.0",
